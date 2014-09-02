@@ -1,5 +1,9 @@
 package com.paulesson.elevator.config;
 
+import com.paulesson.elevator.Elevator;
+import com.paulesson.elevator.ElevatorCommandRouter;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,5 +26,12 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
         return resolver;
+    }
+    
+    @Bean
+    public ElevatorCommandRouter setupCommandRouter(){
+        List<Elevator> availibleElevators = new ArrayList<Elevator>();
+        ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
+        return ecr;
     }
 }

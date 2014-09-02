@@ -14,9 +14,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Elevator")
 public class Elevator {
+    private Direction direction;
     private short currentFloor;
     private byte numPeople;
 
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+    
     public short getCurrentFloor() {
         return currentFloor;
     }

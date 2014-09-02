@@ -13,7 +13,16 @@ public class Elevator {
     byte allocatedLoad;
     Direction direction;
     
+    public Elevator(){}
 
+    public Elevator(Elevator org){
+        this.currentFloor = org.currentFloor;
+        this.capacity = org.capacity;
+        this.load = org.load;
+        this.allocatedLoad = org.allocatedLoad;
+        this.direction = org.direction;
+    }
+    
     public short getCurrentFloor() {
         return currentFloor;
     }
@@ -53,4 +62,5 @@ public class Elevator {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+    
 }
