@@ -31,7 +31,7 @@ public class CommandProcessingThread extends Thread {
                 ecr.waitForElevatorAvailable();
                 currentCommand = ecr.waitDequeueCommand();
                 currentElevator = ecr.requestElevator(currentCommand);
-                currentElevator.execute(currentCommand);
+                ecr.execute(currentCommand,currentElevator);
                 
             } catch(InterruptedException e) {
                 

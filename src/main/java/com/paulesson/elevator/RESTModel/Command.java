@@ -1,5 +1,6 @@
 package com.paulesson.elevator.RESTModel;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Command, sent when elevator is called
@@ -8,32 +9,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement(name = "Command")
-public class Command {
+public class Command implements Serializable{
 
-    private byte people;
-    private short levelFrom;
-    private short levelTo;
+    private int people;
+    private int levelFrom;
+    private int levelTo;
 
-    Command(byte people, short levelFrom, short levelTo) {
+    public Command(){}
+    
+    public Command(byte people, short levelFrom, short levelTo) {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;
     }
     
     public com.paulesson.elevator.RequestCommand toRequestCommand(){
-        com.paulesson.elevator.RequestCommand rc = new com.paulesson.elevator.RequestCommand(people,levelFrom,levelTo);
+        com.paulesson.elevator.RequestCommand rc = new com.paulesson.elevator.RequestCommand((byte)people,(short)levelFrom,(short)levelTo);
         return rc;
     }
 
-    public byte getPeople() {
+    public int getPeople() {
         return people;
     }
 
-    public void setPeople(byte people) {
+    public void setPeople(int people) {
         this.people = people;
     }
 
-    public short getLevelFrom() {
+    public int getLevelFrom() {
         return levelFrom;
     }
 
@@ -41,11 +44,11 @@ public class Command {
         this.levelFrom = levelFrom;
     }
 
-    public short getLevelTo() {
+    public int getLevelTo() {
         return levelTo;
     }
 
-    public void setLevelTo(short levelTo) {
+    public void setLevelTo(int levelTo) {
         this.levelTo = levelTo;
     }
 

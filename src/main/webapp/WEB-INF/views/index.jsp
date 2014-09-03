@@ -18,9 +18,41 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
         <script>
-            function myFunction() {
-                document.getElementById("demo").innerHTML = "Paragraph changed.";
+            var commandaddress = "${pageContext.request.contextPath}/api/elevators/command"
+            var floorTo = [0,0,0,0,0,0,0,0,0,0];
+            var people = [0,0,0,0,0,0,0,0,0,0];
+            
+            function selectPeople(peoplenum, floor) {
+                document.getElementById("selectPeopleLvl" + floor).innerHTML = peoplenum;
+                people[floor]=peoplenum;
+                sendCommandIfSet(floor);
             }
+            
+            function selectFloor(floortonum, floor) {
+                document.getElementById("floorSelectLvl" + floor).innerHTML = floortonum;
+                floorTo[floor]=floortonum;
+                sendCommandIfSet(floor);
+            }
+            
+            function sendCommandIfSet(floor){
+                if ( floorTo[floor] != 0 &&  people[floor] != 0){
+                    var amtPeople = people[floor];
+                    var lvlFrom = floor;
+                    var lvlTo = floorTo[floor];
+                    var command = {people:amtPeople, levelFrom:lvlFrom, levelTo:lvlTo};
+                    $.ajax({
+                       type: "POST",
+                       url: commandaddress,
+                       data: JSON.stringify(command),
+                       contentType: "application/json; charset=utf-8",
+                       dataType: "json"});
+                   
+                   floorTo[floor] = 0;
+                   people[floor] = 0;
+               }
+            }
+            
+            
         </script>
 
 
@@ -53,7 +85,6 @@
                 </div>
             </div>
             <c:forTokens items="10,9,8,7,6,5,4,3,2,1" delims="," var="floor">
-            <!--<%// for (int floor = 10; floor >= 1; floor--) {%>-->
             <div class="Row" id="floor${floor}">
                 <div class="Cell">
                     <p>${floor}</p>
@@ -84,9 +115,12 @@
 
                         <ul class="dropdown-menu" role="menu" aria-labelledby="floorSelectLvl${floor}">
                             <c:forEach var="floornum" begin="1" end="10">
-                                <li role="presentation">
-                                    <a role="menuitem" tabindex="-1" href="#" href="#" onclick="selectPeople(${floornum}, ${floor});return false;">${floornum}</a>
-                                </li>
+                                <c:if test="${floor != floornum}">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="#" href="#" onclick="selectFloor(${floornum}, ${floor});return false;">${floornum}</a>
+                                    </li>
+                                </c:if>
+                                    
                             </c:forEach>
                         </ul>
 
@@ -113,7 +147,6 @@
                 
             </div>
             </c:forTokens>
-            <% //} //Each Floor%> 
         </div>
 
     </div>

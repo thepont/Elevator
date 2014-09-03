@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,7 +45,7 @@ public class ElevatorRESTController {
      * @return true on success
      */
     @RequestMapping(value = "/command", method = RequestMethod.POST)
-    public @ResponseBody Boolean sendCommand(Command cmd)
+    public @ResponseBody Boolean sendCommand(@RequestBody final Command cmd)
     {
         ecr.queueCommand(cmd.toRequestCommand());
         return true;

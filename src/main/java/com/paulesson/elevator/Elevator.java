@@ -12,9 +12,6 @@ import org.springframework.scheduling.annotation.Async;
  */
 @Scope("prototype")
 public class Elevator {
-
-    @Autowired
-    ElevatorCommandRouter ecr;
     
     // Time taken to move a floor 
     private static final long LIFT_DELAY = 500L;
@@ -194,17 +191,5 @@ public class Elevator {
         }
     }
     
-    @Async
-    public void execute(RequestCommand cmd){
-        short from = cmd.getLevelFrom();
-        short to = cmd.getLevelTo();
-        byte amtPeople = cmd.getPeople();
-
-        moveTo(from);
-        pickUp(amtPeople);
-        moveTo(to);
-        dropOff(amtPeople);
-        direction = Direction.STOPPED;
-        ecr.markElevatorAsAvailable();
-    } 
+ 
 }

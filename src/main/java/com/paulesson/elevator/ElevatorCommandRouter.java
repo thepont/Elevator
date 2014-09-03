@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import javax.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 
 /**
  *
@@ -96,7 +98,19 @@ public class ElevatorCommandRouter {
     protected int getQueueSemephoreSize(){
         return queueEmpty.availablePermits();
     }
-    
+    @Async
+    public void execute(RequestCommand cmd, Elevator e){
+        short from = cmd.getLevelFrom();
+        short to = cmd.getLevelTo();
+        byte amtPeople = cmd.getPeople();
+
+        e.moveTo(from);
+        e.pickUp(amtPeople);
+        e.moveTo(to);
+        e.dropOff(amtPeople);
+        e.setDirection(Direction.STOPPED);
+        markElevatorAsAvailable();
+    } 
     /*
     * Return a copy of the current Elevators.
     **/

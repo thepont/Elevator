@@ -6,6 +6,7 @@
 
 package com.paulesson.elevator.RESTModel;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -13,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Paul Esson
  */
 @XmlRootElement(name = "Elevator")
-public class Elevator {
+public class Elevator implements Serializable{
     
     public static int FIRST_FLOOR_OFFSET =1;
     
