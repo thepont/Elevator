@@ -100,7 +100,7 @@ public class ElevatorCommandRouter {
     /*
     * Return a copy of the current Elevators.
     **/
-    List<Elevator> getElevators()
+    public List<Elevator> getElevators()
     {
        List<Elevator> copy = new ArrayList<Elevator>();
        for(Elevator ele : elevators){

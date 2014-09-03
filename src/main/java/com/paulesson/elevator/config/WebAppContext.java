@@ -23,6 +23,9 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @ComponentScan(basePackages = {"com.paulesson.elevate.mvc.controllers"})
 public class WebAppContext extends WebMvcConfigurerAdapter {
 
+    public static int NUMBER_ELEVATORS = 4;
+    public static char FIRST_ELEVATOR_NAME = 'A';
+    
     @Bean
     public UrlBasedViewResolver setupViewResolver() {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
@@ -35,6 +38,10 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     @Bean
     public ElevatorCommandRouter setupCommandRouter(){
         List<Elevator> availibleElevators = new ArrayList<Elevator>();
+        for(int i = 0; i < NUMBER_ELEVATORS; i++)
+        {
+            availibleElevators.add(new Elevator(String.valueOf(FIRST_ELEVATOR_NAME+i)));
+        }
         ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
         return ecr;
     }

@@ -1,6 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+    "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
     <head>
@@ -16,12 +18,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
         <script>
-        function myFunction() {
-            document.getElementById("demo").innerHTML = "Paragraph changed.";   
-        }
+            function myFunction() {
+                document.getElementById("demo").innerHTML = "Paragraph changed.";
+            }
         </script>
-        
-        
+
+
         <title>Elevator</title>
     </head>
     <body>
@@ -50,68 +52,72 @@
                     <p>Elevator D</p>
                 </div>
             </div>
-        
+            <c:forTokens items="10,9,8,7,6,5,4,3,2,1" delims="," var="floor">
+            <!--<%// for (int floor = 10; floor >= 1; floor--) {%>-->
+            <div class="Row" id="floor${floor}">
                 <div class="Cell">
-                    <p>10</p>
+                    <p>${floor}</p>
                 </div>
                 <div class="Cell">
                     <div class="dropdown">
-                        
-                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+
+                        <a id="selectPeopleLvl${floor}" role="button" data-toggle="dropdown" data-target="#">
                             People <span class="caret">
-                        </span></a>
+                            </span></a>
                         
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action</a>
-                            </li>
-                            
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action2</a>
-                            </li>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="selectPeopleLvl${floor}">
+                            <c:forEach var="peoplenum" begin="1" end="20">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#" href="#" onclick="selectPeople(${peoplenum}, ${floor});return false;">${peoplenum}</a>
+                                </li>
+                            </c:forEach>
                         </ul>
-                      
+
                     </div>
                 </div>
                 <div class="Cell">
                     <div class="dropdown">
-                        
-                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+
+                        <a id="floorSelectLvl${floor}" role="button" data-toggle="dropdown" data-target="#">
                             Level <span class="caret">
-                        </span></a>
-                        
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action</a>
-                            </li>
-                            
-                            <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Action2</a>
-                            </li>
+                            </span></a>
+
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="floorSelectLvl${floor}">
+                            <c:forEach var="floornum" begin="1" end="10">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#" href="#" onclick="selectPeople(${floornum}, ${floor});return false;">${floornum}</a>
+                                </li>
+                            </c:forEach>
                         </ul>
-                      
+
                     </div>
                 </div>
-                <div class="FloorShaft">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
-                    
-                </div>
-                <div class="FloorShaft">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    
-                </div>
-                <div class="FloorShaft" style="text-align: center">
-                    <span class="glyphicon glyphicon-stop"></span>
-                </div>
-                <div class="FloorShaft">
-                    <span class="glyphicon glyphicon-stop"></span>
-                </div>
+               
+                <c:forEach items="${elevators}" var="elevator">
+                    <div class="FloorShaft">
+                    <c:if test="${elevator.currentFloor == floor}" >
+                        <c:choose>
+                            <c:when test="${elevator.direction == 'UP'}">
+                                <span class="glyphicon glyphicon-chevron-up"></span>
+                            </c:when>
+                            <c:when test="${elevator.direction == 'DOWN'}">
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            </c:when>
+                            <c:when test="${elevator.direction == 'STOPPED'}">
+                                <span class="glyphicon glyphicon-stop"></span>
+                            </c:when>
+                        </c:choose>
+                    </c:if>
+                    </div>
+                </c:forEach>
+                
             </div>
-            
+            </c:forTokens>
+            <% //} //Each Floor%> 
         </div>
-        
-        
-        
-    </body>
+
+    </div>
+
+</body>
 </html>
 

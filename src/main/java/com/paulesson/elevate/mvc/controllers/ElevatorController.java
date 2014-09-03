@@ -1,6 +1,8 @@
 package com.paulesson.elevate.mvc.controllers;
 
 import com.paulesson.elevator.ElevatorCommandRouter;
+import com.paulesson.elevator.RESTModel.Elevator;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +25,12 @@ public class ElevatorController {
     
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showElevators(){
-        //load list of elevators.
-        //List<com.paulesson.elevator.Elevator> elevators = new ArrayList<com.paulesson.elevator.Elevator>();
-        ModelAndView model = new ModelAndView("index", "elevatorlist", "bla");
+        ArrayList<Elevator> elevators = new ArrayList<Elevator>();
+        for(com.paulesson.elevator.Elevator el : ecr.getElevators()){
+            elevators.add(new Elevator(el));
+        }
+        ModelAndView model = new ModelAndView("index");
+        model.addObject("elevators", elevators);
         return model;
     }
 }

@@ -14,9 +14,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Elevator")
 public class Elevator {
+    
+    public static int FIRST_FLOOR_OFFSET =1;
+    
+    public Elevator(com.paulesson.elevator.Elevator from){
+        this.direction = Direction.fromControllerDirection(from.getDirection());
+        this.currentFloor = from.getCurrentFloor() + FIRST_FLOOR_OFFSET;
+        this.numPeople = from.getLoad();
+    }
+    
+    public Elevator(){}
+    
     private Direction direction;
-    private short currentFloor;
-    private byte numPeople;
+    private int currentFloor;
+    private int numPeople;
 
     public Direction getDirection() {
         return direction;
@@ -26,19 +37,19 @@ public class Elevator {
         this.direction = direction;
     }
     
-    public short getCurrentFloor() {
+    public int getCurrentFloor() {
         return currentFloor;
     }
 
-    public void setCurrentFloor(short currentFloor) {
+    public void setCurrentFloor(int currentFloor) {
         this.currentFloor = currentFloor;
     }
 
-    public byte getNumPeople() {
+    public int getNumPeople() {
         return numPeople;
     }
 
-    public void setNumPeople(byte numPeople) {
+    public void setNumPeople(int numPeople) {
         this.numPeople = numPeople;
     }
 }
