@@ -6,6 +6,8 @@
 
 package com.paulesson.elevator;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -20,11 +22,24 @@ public class CommandProcessingThread extends Thread {
     @Autowired
     ElevatorCommandRouter ecr;
     
+    boolean running = true;
+    
+    @PostConstruct
+    public void init(){
+        this.start();
+    }
+    
+    @PreDestroy
+    public void destory(){
+        running = false;
+        this.interrupt();
+    }
+    
     @Override
     public void run() {
         RequestCommand currentCommand;
         Elevator currentElevator;
-        while(true)
+        while(running)
         {
             try {
                 currentCommand = null;

@@ -22,6 +22,7 @@ public class Elevator implements Serializable{
         this.direction = Direction.fromControllerDirection(from.getDirection());
         this.currentFloor = from.getCurrentFloor();
         this.numPeople = from.getLoad();
+        this.name = from.getName();
     }
     
     public Elevator(){}
@@ -29,6 +30,7 @@ public class Elevator implements Serializable{
     private Direction direction;
     private int currentFloor;
     private int numPeople;
+    private String name;
 
     public Direction getDirection() {
         return direction;
@@ -53,4 +55,14 @@ public class Elevator implements Serializable{
     public void setNumPeople(int numPeople) {
         this.numPeople = numPeople;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
 }
+

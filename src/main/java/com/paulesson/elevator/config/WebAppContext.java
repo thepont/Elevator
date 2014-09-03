@@ -49,7 +49,7 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     @Bean
     public CommandProcessingThread setupCommandProcessingThread(){
         CommandProcessingThread cpt = new CommandProcessingThread();
-        cpt.start();
+        //cpt.start();
         return cpt;
     }
     

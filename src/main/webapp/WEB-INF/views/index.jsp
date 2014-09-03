@@ -18,9 +18,64 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
         <script>
-            var commandaddress = "${pageContext.request.contextPath}/api/elevators/command"
+            var commandaddress = "${pageContext.request.contextPath}/api/elevators/command";
+            var liftupdateaddress = "${pageContext.request.contextPath}/api/elevators/";
             var floorTo = [0,0,0,0,0,0,0,0,0,0];
             var people = [0,0,0,0,0,0,0,0,0,0];
+            var interval = 400;
+            
+            var lastKnowLocation = {};
+            var lastKnowDirection = {};
+                    
+            <c:forEach items="${elevators}" var="elevator">
+                lastKnowLocation[${elevator.name}]= ${elevator.currentFloor};
+                lastKnowDirection[${elevator.name}]= "${elevator.direction}";
+            </c:forEach>
+            
+            var statusCurrent;
+            
+            var STOPPED_GRAPHIC = "<span class='glyphicon glyphicon-stop'></span>";
+            var UP_GRAPHIC = "<span class='glyphicon glyphicon-chevron-up'></span>";
+            var DOWN_GRAPHIC = "<span class='glyphicon glyphicon-chevron-down'></span>";
+            window.onload = function()
+                {
+            timer = setInterval(
+                    function () { updateLifts() }, 
+                    interval);
+                }
+            
+            function updateLifts(){
+                $.ajax({
+                    url: liftupdateaddress,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        updatePage(data);
+                        }
+                    });
+            }
+            
+            function updatePage(liftStatus){
+                statusCurrent = liftStatus;
+                for (i = 0; i < liftStatus.length; i++) {
+                    if(lastKnowLocation[liftStatus[i].name] !== liftStatus[i].currentFloor ||
+                       lastKnowDirection[liftStatus[i].name] !== liftStatus[i].direction ){
+                        var s= document.getElementById("F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name);
+                        if(liftStatus[i].direction === "DOWN"){
+                            s.innerHTML = DOWN_GRAPHIC;
+                        } else if(liftStatus[i].direction === "UP"){
+                            s.innerHTML = UP_GRAPHIC;
+                        } else {
+                            s.innerHTML = STOPPED_GRAPHIC;
+                        }
+                        var s= document.getElementById("F"+lastKnowLocation[liftStatus[i].name]+"E"+liftStatus[i].name);
+                        s.innerHTML = "";
+                        lastKnowLocation[liftStatus[i].name] = liftStatus[i].currentFloor;
+                        lastKnowDirection[liftStatus[i].name] = liftStatus[i].direction;
+                    }
+                }
+
+            }
             
             function selectPeople(peoplenum, floor) {
                 document.getElementById("selectPeopleLvl" + floor).innerHTML = peoplenum;
@@ -49,6 +104,8 @@
                    
                    floorTo[floor] = 0;
                    people[floor] = 0;
+                   document.getElementById("floorSelectLvl" + floor).innerHTML = "Level";
+                   document.getElementById("selectPeopleLvl" + floor).innerHTML = "People";
                }
             }
             
@@ -128,7 +185,7 @@
                 </div>
                
                 <c:forEach items="${elevators}" var="elevator">
-                    <div class="FloorShaft">
+                    <div class="FloorShaft" id="F${floor}E${elevator.name}">
                     <c:if test="${elevator.currentFloor == floor}" >
                         <c:choose>
                             <c:when test="${elevator.direction == 'UP'}">
