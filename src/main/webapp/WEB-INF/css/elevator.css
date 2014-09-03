@@ -7,13 +7,18 @@
 .heading { 
     font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans serif;
     text-align: center;
-   
+    text-shadow: 1px 1px #dfdfdf;
+    font-size: 400%;
+    font-style: italic;
     }
 
     
     .Table
     {
         display: table;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
     }
 
     .Row
@@ -24,7 +29,7 @@
     .FloorShaft
     {
         display: table-cell;
-        border: dashed;
+        border: solid;
         border-width: thin;
         padding-left: 5px;
         padding-right: 5px;
@@ -32,7 +37,8 @@
     .Cell
     {
         display: table-cell;
-        border: solid;
+        border-bottom: solid;
+        
         border-width: thin;
         padding-left: 5px;
         padding-right: 5px;

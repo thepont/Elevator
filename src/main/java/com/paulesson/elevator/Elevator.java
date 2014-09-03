@@ -1,5 +1,7 @@
 package com.paulesson.elevator;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +18,30 @@ public class Elevator {
     // Time taken to move a floor 
     private static final long LIFT_DELAY = 500L;
     private static final Direction INITAL_DIRECTION = Direction.STOPPED;
-    private static final byte INIT_LOAD = 0;
+    private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 0;
     private static final byte DEFAULT_CAPACITY = 20;
     
     
-    private String name;
-    private short currentFloor;
-    private byte capacity;
-    private byte load;
-    private byte allocatedLoad;
-    private Direction direction;
+    private final String name;
+
+    private AtomicInteger currentFloor;
+    private AtomicInteger allocatedLoad;
+    private AtomicInteger load;
+    
+    //private short currentFloor;
+    private final byte capacity;
+
+    
+    private AtomicReference<Direction> direction;
     
     public Elevator(String name)
     {
         this.name = name;
-        this.direction = INITAL_DIRECTION;
-        this.allocatedLoad = INIT_LOAD;
-        this.currentFloor = INIT_FLOOR;
+        this.direction.set(INITAL_DIRECTION);
+        this.allocatedLoad = new AtomicInteger(INIT_LOAD);
+        this.currentFloor = new AtomicInteger(INIT_FLOOR);
+        this.load = new AtomicInteger(INIT_LOAD);
         this.capacity = DEFAULT_CAPACITY;
     }
 
@@ -49,59 +57,51 @@ public class Elevator {
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     
-    public short getCurrentFloor() {
-        return currentFloor;
+    public int getCurrentFloor() {
+        return currentFloor.get();
     }
 
     public void setCurrentFloor(short currentFloor) {
-        this.currentFloor = currentFloor;
+        this.currentFloor.set(currentFloor);
     }
 
     public byte getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(byte capacity) {
-        this.capacity = capacity;
+    public int getLoad() {
+        return load.get();
     }
 
-    public byte getLoad() {
-        return load;
-    }
-
-    public void setLoad(byte load) {
-        this.load = load;
+    public void setLoad(int load) {
+        this.load.set(load);
     }
     
-    public byte getAllocatedLoad() {
-        return allocatedLoad;
+    public int getAllocatedLoad() {
+        return allocatedLoad.get();
     }
 
-    public void setAllocatedLoad(byte allocatedLoad) {
-        this.allocatedLoad = allocatedLoad;
+    public void setAllocatedLoad(int allocatedLoad) {
+        this.allocatedLoad.set(allocatedLoad);
     }
 
     public Direction getDirection() {
-        return direction;
+        return direction.get();
     }
     
     public void setDirection(Direction direction) {
-        this.direction = direction;
+        this.direction.set(direction);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0 );
-        hash = 37 * hash + this.currentFloor;
+        hash = 37 * hash + this.currentFloor.hashCode();
         hash = 37 * hash + this.capacity;
-        hash = 37 * hash + this.load;
-        hash = 37 * hash + this.allocatedLoad;
+        hash = 37 * hash + this.load.hashCode();
+        hash = 37 * hash + this.allocatedLoad.hashCode();
         hash = 37 * hash + (this.direction != null ? this.direction.hashCode() : 0);
         return hash;
     }
@@ -151,41 +151,35 @@ public class Elevator {
     public int moveUpFloor(){
         delayLift();
         //direction = Direction.UP;
-        return ++currentFloor;
+        return currentFloor.incrementAndGet();
     }
     
     public int moveDownFloor(){
         delayLift();
-        return --currentFloor;
+        return currentFloor.decrementAndGet();
     }
     
     public int pickUp(int amt){
         delayLift();
-        return load+=amt;
+        return load.getAndAdd(amt);
     } 
     
     public int dropOff(int amt){
         delayLift();
-        return load-=amt;
+        return load.getAndAdd(-amt);
     }
     
     public void moveTo(int floor){
-        if(currentFloor < floor)
+        while(currentFloor.get() != floor)
         {
-            direction = Direction.UP;
-        }
-        if(currentFloor > floor)
-        {
-            direction = Direction.DOWN;
-        }
-        while(currentFloor != floor)
-        {
-            if(direction == Direction.UP)
+            if(currentFloor.get() < floor)
             {
+                direction.lazySet(Direction.UP);
                 moveUpFloor();
-            } 
-            else
+            }
+            if(currentFloor.get() > floor)
             {
+                direction.lazySet(Direction.DOWN);
                 moveDownFloor();
             }
         }
