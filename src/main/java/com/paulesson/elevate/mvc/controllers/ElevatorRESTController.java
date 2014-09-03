@@ -34,9 +34,12 @@ public class ElevatorRESTController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public @ResponseBody List<Elevator> getElevators()
     {
-        List<Elevator> elevators = new ArrayList<Elevator>();
-        elevators.add(new Elevator());
-        return elevators;
+       List<com.paulesson.elevator.Elevator> elevators = ecr.getElevators();
+       List<Elevator> copy = new ArrayList<Elevator>();
+       for(com.paulesson.elevator.Elevator ele : elevators){
+           copy.add(new Elevator(ele));
+       } 
+       return copy;
     }
     
     /**
