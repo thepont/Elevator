@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
+import javax.annotation.PreDestroy;
 
 /**
  *
@@ -17,14 +18,23 @@ public class ElevatorCommandRouter {
     private final Semaphore elevatorAvailible;
     private final Semaphore queueEmpty = new Semaphore(START_QUEUE_SIZE);
     
-    private ConcurrentLinkedQueue<RequestCommand> commandQueue;
-
+    private ConcurrentLinkedQueue<RequestCommand> commandQueue = new ConcurrentLinkedQueue<RequestCommand>();
+    private boolean running = true;
     
     public ElevatorCommandRouter(List<Elevator> elevators)
     {
         this.elevators = elevators;
         elevatorAvailible = new Semaphore(elevators.size());
         queueEmpty.drainPermits();
+    }
+     
+    /**
+     * Release semaphores and kill thread.
+     */
+    @PreDestroy
+    public void destory(){
+        queueEmpty.release();
+        running = false;
     }
     
     /**
@@ -64,7 +74,7 @@ public class ElevatorCommandRouter {
      * Thread waits until an elevator becomes available.
      * @throws InterruptedException 
      */
-    private void waitForElevatorAvailable() throws InterruptedException {
+    public void waitForElevatorAvailable() throws InterruptedException {
         try
         {
             elevatorAvailible.acquire();
@@ -81,6 +91,11 @@ public class ElevatorCommandRouter {
     protected void markElevatorAsAvailable(){
         elevatorAvailible.release();
     }
+   
+    
+    protected int getQueueSemephoreSize(){
+        return queueEmpty.availablePermits();
+    }
     
     /*
     * Return a copy of the current Elevators.
@@ -94,23 +109,11 @@ public class ElevatorCommandRouter {
        return copy;
     }
     
-    void elevatorControl(){
-        RequestCommand currentCommand;
-        Elevator currentElevator;
-        while(true)
-        {
-            try {
-                currentCommand = null;
-                waitForElevatorAvailable();
-                currentCommand = waitDequeueCommand();
-                currentElevator = requestElevator(currentCommand);
-                
-            } catch(InterruptedException e) {
-                
-            }
-        }
-    }
-   
+    /**
+     * requests an elevator
+     * @param cmd
+     * @return 
+     */
     
     Elevator requestElevator(RequestCommand cmd)
     {
@@ -122,7 +125,7 @@ public class ElevatorCommandRouter {
             {
                 if(ele.getAllocatedLoad() + cmd.getPeople() < ele.getCapacity())
                 {
-                    distance = (short)Math.abs(ele.currentFloor - cmd.getLevelFrom());  
+                    distance = (short)Math.abs(ele.getCurrentFloor() - cmd.getLevelFrom());  
                     if( distance < mindistance)
                     {
                         mindistance = distance;

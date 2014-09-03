@@ -17,7 +17,7 @@ public class RequestCommand {
     private short levelFrom;
     private short levelTo;
 
-    RequestCommand(byte people, short levelFrom, short levelTo) {
+    public RequestCommand(byte people, short levelFrom, short levelTo) {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;

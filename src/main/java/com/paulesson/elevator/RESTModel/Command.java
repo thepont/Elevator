@@ -1,7 +1,6 @@
 package com.paulesson.elevator.RESTModel;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Command, sent when elevator is called
  *
@@ -19,6 +18,11 @@ public class Command {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;
+    }
+    
+    public com.paulesson.elevator.RequestCommand toRequestCommand(){
+        com.paulesson.elevator.RequestCommand rc = new com.paulesson.elevator.RequestCommand(people,levelFrom,levelTo);
+        return rc;
     }
 
     public byte getPeople() {

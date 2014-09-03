@@ -44,10 +44,9 @@ public class ElevatorRESTController {
      * @return true on success
      */
     @RequestMapping(value = "/command", method = RequestMethod.POST)
-    public @ResponseBody Boolean getElevators(Command cmd)
+    public @ResponseBody Boolean sendCommand(Command cmd)
     {
-        List<Elevator> elevators = new ArrayList<Elevator>();
-        elevators.add(new Elevator());
+        ecr.queueCommand(cmd.toRequestCommand());
         return true;
     }
     

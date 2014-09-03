@@ -1,5 +1,6 @@
 package com.paulesson.elevator.config;
 
+import com.paulesson.elevator.CommandProcessingThread;
 import com.paulesson.elevator.Elevator;
 import com.paulesson.elevator.ElevatorCommandRouter;
 import java.util.ArrayList;
@@ -8,13 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
+@EnableAsync
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.paulesson.elevate.mvc.controllers"})
 public class WebAppContext extends WebMvcConfigurerAdapter {
@@ -33,5 +37,17 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         List<Elevator> availibleElevators = new ArrayList<Elevator>();
         ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
         return ecr;
+    }
+    
+    @Bean
+    public CommandProcessingThread setupCommandProcessingThread(){
+        CommandProcessingThread cpt = new CommandProcessingThread();
+        cpt.start();
+        return cpt;
+    }
+    
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
     }
 }
