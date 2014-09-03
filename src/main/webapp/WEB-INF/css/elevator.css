@@ -4,7 +4,36 @@
 */
 
 
-H1 { 
+.heading { 
     font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans serif;
-    text-align: center 
+    text-align: center;
+   
+    }
+
+    
+    .Table
+    {
+        display: table;
+    }
+
+    .Row
+    {
+        display: table-row;
+    }
+    
+    .FloorShaft
+    {
+        display: table-cell;
+        border: dashed;
+        border-width: thin;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .Cell
+    {
+        display: table-cell;
+        border: solid;
+        border-width: thin;
+        padding-left: 5px;
+        padding-right: 5px;
     }
