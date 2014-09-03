@@ -33,10 +33,7 @@
             </c:forEach>
             
             var statusCurrent;
-            
-            var STOPPED_GRAPHIC = "<span class='glyphicon glyphicon-stop'></span>";
-            var UP_GRAPHIC = "<span class='glyphicon glyphicon-chevron-up'></span>";
-            var DOWN_GRAPHIC = "<span class='glyphicon glyphicon-chevron-down'></span>";
+
             window.onload = function()
                 {
             timer = setInterval(
@@ -58,24 +55,38 @@
             function updatePage(liftStatus){
                 statusCurrent = liftStatus;
                 for (i = 0; i < liftStatus.length; i++) {
+                    
                     if(lastKnowLocation[liftStatus[i].name] !== liftStatus[i].currentFloor ||
                        lastKnowDirection[liftStatus[i].name] !== liftStatus[i].direction ){
                         var s= document.getElementById("F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name);
+                        var iconLBL = "F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name + "Icon";
                         if(liftStatus[i].direction === "DOWN"){
-                            s.innerHTML = DOWN_GRAPHIC;
+                            s.innerHTML = "<span class='glyphicon glyphicon-chevron-down' id='"+iconLBL+"'></span>";
+                           
                         } else if(liftStatus[i].direction === "UP"){
-                            s.innerHTML = UP_GRAPHIC;
+                            s.innerHTML = "<span class='glyphicon glyphicon-chevron-up' id='"+iconLBL+"'></span>";
+                            
                         } else {
-                            s.innerHTML = STOPPED_GRAPHIC;
+                            s.innerHTML = "<span class='glyphicon glyphicon-stop' id='"+iconLBL+"'></span>";
+                            
                         }
-                        var s= document.getElementById("F"+lastKnowLocation[liftStatus[i].name]+"E"+liftStatus[i].name);
-                        s.innerHTML = "";
+
+                        fadeLastKnow(liftStatus[i]);
                         lastKnowLocation[liftStatus[i].name] = liftStatus[i].currentFloor;
                         lastKnowDirection[liftStatus[i].name] = liftStatus[i].direction;
                     }
                 }
-
             }
+            
+            function fadeLastKnow(liftStatus){
+                if(lastKnowLocation[liftStatus.name] !== liftStatus.currentFloor){
+                    var s= document.getElementById("F"+lastKnowLocation[liftStatus.name]+"E"+liftStatus.name);
+                    $("#F"+lastKnowLocation[liftStatus.name]+"E"+liftStatus.name+"Icon").fadeOut( "slow", function() {
+                        s.innerHTML = "";
+                    });
+                }
+            }
+            
             
             function selectPeople(peoplenum, floor) {
                 document.getElementById("selectPeopleLvl" + floor).innerHTML = peoplenum;
@@ -189,13 +200,13 @@
                     <c:if test="${elevator.currentFloor == floor}" >
                         <c:choose>
                             <c:when test="${elevator.direction == 'UP'}">
-                                <span class="glyphicon glyphicon-chevron-up"></span>
+                                <span class="glyphicon glyphicon-chevron-up" id="F${floor}E${elevator.name}Icon"></span>
                             </c:when>
                             <c:when test="${elevator.direction == 'DOWN'}">
-                                <span class="glyphicon glyphicon-chevron-down"></span>
+                                <span class="glyphicon glyphicon-chevron-down" id="F${floor}E${elevator.name}Icon></span>
                             </c:when>
                             <c:when test="${elevator.direction == 'STOPPED'}">
-                                <span class="glyphicon glyphicon-stop"></span>
+                                <span class="glyphicon glyphicon-stop"  id="F${floor}E${elevator.name}Icon"></span>
                             </c:when>
                         </c:choose>
                     </c:if>
