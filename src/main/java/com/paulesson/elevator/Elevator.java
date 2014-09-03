@@ -4,9 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Async;
 
 /**
  * This class represents a mock elevator
@@ -25,9 +23,9 @@ public class Elevator {
     
     private final String name;
 
-    private AtomicInteger currentFloor;
-    private AtomicInteger allocatedLoad;
-    private AtomicInteger load;
+    private final AtomicInteger currentFloor;
+    private final AtomicInteger allocatedLoad;
+    private final AtomicInteger load;
     
     //private short currentFloor;
     private final byte capacity;
@@ -38,10 +36,12 @@ public class Elevator {
     public Elevator(String name)
     {
         this.name = name;
-        this.direction.set(INITAL_DIRECTION);
+        
         this.allocatedLoad = new AtomicInteger(INIT_LOAD);
         this.currentFloor = new AtomicInteger(INIT_FLOOR);
         this.load = new AtomicInteger(INIT_LOAD);
+        this.direction = new AtomicReference<Direction>();
+        this.direction.set(INITAL_DIRECTION);
         this.capacity = DEFAULT_CAPACITY;
     }
 
@@ -181,7 +181,7 @@ public class Elevator {
             {
                 direction.lazySet(Direction.DOWN);
                 moveDownFloor();
-            }
+            }   
         }
     }
     
