@@ -17,7 +17,7 @@ public class Elevator {
     private static final long LIFT_DELAY = 500L;
     private static final Direction INITAL_DIRECTION = Direction.STOPPED;
     private static final int INIT_LOAD = 0;
-    private static final short INIT_FLOOR = 0;
+    private static final short INIT_FLOOR = 1;
     private static final byte DEFAULT_CAPACITY = 20;
     
     

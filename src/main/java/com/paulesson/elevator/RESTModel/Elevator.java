@@ -16,11 +16,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Elevator")
 public class Elevator implements Serializable{
     
-    public static int FIRST_FLOOR_OFFSET =1;
+
     
     public Elevator(com.paulesson.elevator.Elevator from){
         this.direction = Direction.fromControllerDirection(from.getDirection());
-        this.currentFloor = from.getCurrentFloor() + FIRST_FLOOR_OFFSET;
+        this.currentFloor = from.getCurrentFloor();
         this.numPeople = from.getLoad();
     }
     
