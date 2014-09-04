@@ -41,7 +41,18 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     public static final String JDBC_DRIVER_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     public static final String JDBC_DB_USERNAME = "sa";
     public static final String JDBC_DB_PASSWORD = "";
-    
+
+    public static final String HIBERNATE_DIALECT_PROPERTY = "hibernate.dialect";
+    public static final String HIBERNATE_DIALECT_PROPERTY_VALUE = "org.hibernate.dialect.H2Dialect";
+
+    public static final String HIBERNATE_HBM2DDL_PROPERTY = "hibernate.hbm2ddl.auto";
+    public static final String HIBERNATE_HBM2DDL_PROPERTY_VALUE = "create-drop";
+
+    public static final String HIBERNATE_CURRENT_SESSION_CONTEXT_PROPERTY = "hibernate.current_session_context_class";
+    public static final String HIBERNATE_CURRENT_SESSION_CONTEXT_PROPERTY_VALUE = "thread";
+
+    public static final String HIBERNATE_SHOW_SQL_PROPERTY = "hibernate.show_sql";
+    public static final String HIBERNATE_SHOW_SQL_PROPERTY_VALUE = "true";
     
     
     @Bean
@@ -85,16 +96,13 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     {
         AnnotationSessionFactoryBean sessionFactory = new AnnotationSessionFactoryBean();
         sessionFactory.setDataSource(setupDataSource());
-        String[] packages = {"com.paulesson.elevator.db.entities"};
         sessionFactory.setAnnotatedClasses(com.paulesson.elevator.db.entities.Command.class);
-        //sessionFactory.setAnnotatedPackages(packages);
-        //sessionFactory.setAnnotatedClasses(annotatedClasses);
         Properties hibernateProps = new Properties();
         
-        hibernateProps.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-        hibernateProps.setProperty("hibernate.current_session_context_class", "thread");
-        hibernateProps.setProperty("hibernate.show_sql", "true");
-        hibernateProps.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        hibernateProps.setProperty(HIBERNATE_DIALECT_PROPERTY, HIBERNATE_DIALECT_PROPERTY_VALUE);
+        hibernateProps.setProperty(HIBERNATE_CURRENT_SESSION_CONTEXT_PROPERTY, HIBERNATE_CURRENT_SESSION_CONTEXT_PROPERTY_VALUE);
+        hibernateProps.setProperty(HIBERNATE_SHOW_SQL_PROPERTY , HIBERNATE_SHOW_SQL_PROPERTY_VALUE );
+        hibernateProps.setProperty(HIBERNATE_HBM2DDL_PROPERTY, HIBERNATE_HBM2DDL_PROPERTY_VALUE);
         
         sessionFactory.setHibernateProperties(hibernateProps);
         return sessionFactory;

@@ -20,8 +20,8 @@
         <script>
             var commandaddress = "${pageContext.request.contextPath}/api/elevators/command";
             var liftupdateaddress = "${pageContext.request.contextPath}/api/elevators/";
-            var floorTo = [0,0,0,0,0,0,0,0,0,0];
-            var people = [0,0,0,0,0,0,0,0,0,0];
+            var floorTo = [0,0,0,0,0,0,0,0,0,0,0];
+            var people =  [0,0,0,0,0,0,0,0,0,0,0];
             var interval = 400;
             
             var lastKnowLocation = {};
@@ -101,7 +101,7 @@
             }
             
             function sendCommandIfSet(floor){
-                if ( floorTo[floor] != 0 &&  people[floor] != 0){
+                if ( floorTo[floor] !== 0 &&  people[floor] !== 0){
                     var amtPeople = people[floor];
                     var lvlFrom = floor;
                     var lvlTo = floorTo[floor];
@@ -115,8 +115,8 @@
                    
                    floorTo[floor] = 0;
                    people[floor] = 0;
-                   document.getElementById("floorSelectLvl" + floor).innerHTML = "Level";
-                   document.getElementById("selectPeopleLvl" + floor).innerHTML = "People";
+                   document.getElementById("floorSelectLvl" + floor).innerHTML = "Level <span class='caret'></span>";
+                   document.getElementById("selectPeopleLvl" + floor).innerHTML = "People <span class='caret'></span>";
                }
             }
             

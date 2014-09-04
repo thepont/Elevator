@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * This thread processes commands on the command queue and send them to the
+ * ElevatorCommandRouter to process asynchronously. 
  *
- * @author pont
+ * @author Paul Esson
  */
 @Component
 public class CommandProcessingThread extends Thread {
