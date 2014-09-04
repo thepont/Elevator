@@ -94,7 +94,11 @@ public class ElevatorCommandRouter {
         elevatorAvailible.release();
     }
    
-    
+    /**
+     * Returns the amount of permits available in the semaphore queue, this is equal
+     * to the amount of items in the queue.
+     * @return 
+     */
     protected int getQueueSemephoreSize(){
         return queueEmpty.availablePermits();
     }

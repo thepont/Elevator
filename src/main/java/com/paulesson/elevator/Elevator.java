@@ -8,35 +8,32 @@ import org.springframework.context.annotation.Scope;
 
 /**
  * This class represents a mock elevator
+ *
  * @author Paul Esson
  */
 @Scope("prototype")
 public class Elevator {
-    
+
     // Time taken to move a floor 
     private static final long LIFT_DELAY = 500L;
     private static final Direction INITAL_DIRECTION = Direction.STOPPED;
     private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 1;
     private static final byte DEFAULT_CAPACITY = 20;
-    
-    
+
     private final String name;
 
     private final AtomicInteger currentFloor;
     private final AtomicInteger allocatedLoad;
     private final AtomicInteger load;
-    
-    //private short currentFloor;
+
     private final byte capacity;
 
-    
     private AtomicReference<Direction> direction;
-    
-    public Elevator(String name)
-    {
+
+    public Elevator(String name) {
         this.name = name;
-        
+
         this.allocatedLoad = new AtomicInteger(INIT_LOAD);
         this.currentFloor = new AtomicInteger(INIT_FLOOR);
         this.load = new AtomicInteger(INIT_LOAD);
@@ -45,24 +42,28 @@ public class Elevator {
         this.capacity = DEFAULT_CAPACITY;
     }
 
-    public Elevator(Elevator org){
-        this.name = org.name;
-        this.currentFloor = org.currentFloor;
-        this.capacity = org.capacity;
-        this.load = org.load;
-        this.allocatedLoad = org.allocatedLoad;
-        this.direction = org.direction;
+    /**
+     * Elevator copy constructor
+     * @param elevator original Elevator to copy
+     */
+    public Elevator(Elevator elevator) {
+        this.name = elevator.name;
+        this.currentFloor = elevator.currentFloor;
+        this.capacity = elevator.capacity;
+        this.load = elevator.load;
+        this.allocatedLoad = elevator.allocatedLoad;
+        this.direction = elevator.direction;
     }
 
     public String getName() {
         return name;
     }
-    
+
     public int getCurrentFloor() {
         return currentFloor.get();
     }
 
-    public void setCurrentFloor(short currentFloor) {
+    public void setCurrentFloor(int currentFloor) {
         this.currentFloor.set(currentFloor);
     }
 
@@ -77,7 +78,7 @@ public class Elevator {
     public void setLoad(int load) {
         this.load.set(load);
     }
-    
+
     public int getAllocatedLoad() {
         return allocatedLoad.get();
     }
@@ -89,7 +90,7 @@ public class Elevator {
     public Direction getDirection() {
         return direction.get();
     }
-    
+
     public void setDirection(Direction direction) {
         this.direction.set(direction);
     }
@@ -97,11 +98,11 @@ public class Elevator {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0 );
-        hash = 37 * hash + this.currentFloor.hashCode();
+        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 37 * hash + (this.name != null ? this.currentFloor.hashCode() : 0);
         hash = 37 * hash + this.capacity;
-        hash = 37 * hash + this.load.hashCode();
-        hash = 37 * hash + this.allocatedLoad.hashCode();
+        hash = 37 * hash + (this.name != null ? this.load.hashCode() : 0);
+        hash = 37 * hash + (this.name != null ? this.allocatedLoad.hashCode() : 0);
         hash = 37 * hash + (this.direction != null ? this.direction.hashCode() : 0);
         return hash;
     }
@@ -115,11 +116,11 @@ public class Elevator {
             return false;
         }
         final Elevator other = (Elevator) obj;
-        
-        if(!this.name.equals(other.name)){
+
+        if (!this.name.equals(other.name)) {
             return false;
         }
-        
+
         if (this.currentFloor != other.currentFloor) {
             return false;
         }
@@ -137,53 +138,70 @@ public class Elevator {
         }
         return true;
     }
-    
-    
-    
-    private void delayLift(){
+
+    /**
+     * Delays lift, used to simulate real life elevator conditions.
+    */
+    private void delayLift() {
         try {
             Thread.sleep(LIFT_DELAY);
         } catch (InterruptedException ex) {
             Logger.getLogger(Elevator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public int moveUpFloor(){
+
+    /**
+     * Moves elevator up a floor
+     * @return the updated floor
+     */
+    public int moveUpFloor() {
         delayLift();
-        //direction = Direction.UP;
         return currentFloor.incrementAndGet();
     }
-    
-    public int moveDownFloor(){
+
+    /**
+     * Moves elevator down a floor
+     * @return the updated floor;
+     */
+    public int moveDownFloor() {
         delayLift();
         return currentFloor.decrementAndGet();
     }
-    
-    public int pickUp(int amt){
+
+    /**
+     * Picks people up in the elevator
+     * @param amt amount of people to pick up
+     * @return amount of people in the lift
+     */
+    public int pickUp(int amt) {
         delayLift();
-        return load.getAndAdd(amt);
-    } 
-    
-    public int dropOff(int amt){
-        delayLift();
-        return load.getAndAdd(-amt);
+        return load.addAndGet(amt);
     }
-    
-    public void moveTo(int floor){
-        while(currentFloor.get() != floor)
-        {
-            if(currentFloor.get() < floor)
-            {
+
+    /**
+     * Drops people off the elevator
+     * @param amt amount of people to drop off
+     * @return amount of people in the lift
+     */
+    public int dropOff(int amt) {
+        delayLift();
+        return load.addAndGet(-amt);
+    }
+
+    /**
+     * Moves the elevator to another floor
+     * @param floor floor to move elevator to
+     */
+    public void moveTo(int floor) {
+        while (currentFloor.get() != floor) {
+            if (currentFloor.get() < floor) {
                 direction.lazySet(Direction.UP);
                 moveUpFloor();
             }
-            if(currentFloor.get() > floor)
-            {
+            if (currentFloor.get() > floor) {
                 direction.lazySet(Direction.DOWN);
                 moveDownFloor();
-            }   
+            }
         }
     }
-    
- 
 }
