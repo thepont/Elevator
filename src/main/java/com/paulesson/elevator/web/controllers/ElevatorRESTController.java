@@ -26,6 +26,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/api/elevators/")
 public class ElevatorRESTController extends ElevatorController{
     
+    @Autowired
+    public void setElevatorCommandRouter(ElevatorCommandRouter ecr) {
+        this.ecr = ecr;
+    }
+    
     /**
      * Get the list of elevators and their current locations.
      * @return list of current elevator status.

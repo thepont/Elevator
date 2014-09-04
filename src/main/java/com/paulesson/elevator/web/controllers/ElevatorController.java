@@ -20,10 +20,7 @@ public class ElevatorController {
     
    protected ElevatorCommandRouter ecr;
     
-    @Autowired
-    void setElevatorCommandRouter(ElevatorCommandRouter ecr) {
-        this.ecr = ecr;
-    }
+
     /**
      * Gets elevators from ElevatorCommandRouter and returns rest model of the elevators.
      * @return list of elevators.
