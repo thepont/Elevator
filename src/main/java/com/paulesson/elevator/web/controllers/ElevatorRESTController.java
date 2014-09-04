@@ -57,11 +57,7 @@ public class ElevatorRESTController extends ElevatorController{
     @RequestMapping(value = "/command", method = RequestMethod.POST)
     public @ResponseBody Boolean sendCommand(@RequestBody final Command cmd)
     {
-        com.paulesson.elevator.db.entities.Command commandEnt = new com.paulesson.elevator.db.entities.Command();
-        commandEnt.setFloorFrom(cmd.getLevelFrom());
-        commandEnt.setFloorTo(cmd.getLevelTo());
-        commandEnt.setPeople(cmd.getPeople());
-        commandDao.saveCommand(commandEnt);
+        commandDao.saveCommand(cmd.toDbEntity());
         ecr.queueCommand(cmd.toRequestCommand());
         return true;
     }
@@ -73,10 +69,7 @@ public class ElevatorRESTController extends ElevatorController{
         List<com.paulesson.elevator.db.entities.Command> commandsEnt  = commandDao.getCommands();
         for(com.paulesson.elevator.db.entities.Command commandEnt : commandsEnt )
         {
-            Command cmd = new Command();
-            cmd.setLevelFrom((short)commandEnt.getFloorFrom());
-            cmd.setLevelTo(commandEnt.getFloorTo());
-            cmd.setPeople(commandEnt.getPeople());
+            Command cmd = new Command(commandEnt);
             commands.add(cmd);
         }
         return commands;

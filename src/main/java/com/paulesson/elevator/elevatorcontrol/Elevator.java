@@ -1,6 +1,6 @@
 package com.paulesson.elevator.elevatorcontrol;
 
-import com.paulesson.elevator.elevatorcontrol.model.Direction;
+import com.paulesson.elevator.elevatorcontrol.model.Status;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -17,7 +17,7 @@ public class Elevator {
 
     // Time taken to move a floor 
     private static final long LIFT_DELAY = 500L;
-    private static final Direction INITAL_DIRECTION = Direction.STOPPED;
+    private static final Status INITAL_DIRECTION = Status.STOPPED;
     private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 1;
     
@@ -32,7 +32,7 @@ public class Elevator {
     private final AtomicInteger allocatedLoad;
     private final AtomicInteger load;
     
-    private AtomicReference<Direction> direction;
+    private AtomicReference<Status> direction;
 
     public Elevator(String name) {
         this.name = name;
@@ -40,7 +40,7 @@ public class Elevator {
         this.allocatedLoad = new AtomicInteger(INIT_LOAD);
         this.currentFloor = new AtomicInteger(INIT_FLOOR);
         this.load = new AtomicInteger(INIT_LOAD);
-        this.direction = new AtomicReference<Direction>();
+        this.direction = new AtomicReference<Status>();
         this.direction.set(INITAL_DIRECTION);
     }
 
@@ -86,11 +86,11 @@ public class Elevator {
         this.allocatedLoad.set(allocatedLoad);
     }
 
-    public Direction getDirection() {
+    public Status getDirection() {
         return direction.get();
     }
 
-    protected void setDirection(Direction direction) {
+    protected void setDirection(Status direction) {
         this.direction.set(direction);
     }
 
@@ -192,11 +192,11 @@ public class Elevator {
             return;
         while (currentFloor.get() != floor) {
             if (currentFloor.get() < floor) {
-                direction.lazySet(Direction.UP);
+                direction.lazySet(Status.UP);
                 moveUpFloor();
             }
             if (currentFloor.get() > floor) {
-                direction.lazySet(Direction.DOWN);
+                direction.lazySet(Status.DOWN);
                 moveDownFloor();
             }
         }

@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
  * @author pont
  */
 public class ElevatorRESTControllerTest extends ElevatorControllerTest {
+    
     public ElevatorRESTControllerTest() {
         super();
     }

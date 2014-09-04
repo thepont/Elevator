@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public enum Direction  implements Serializable{
     STOPPED,UP,DOWN;
 
-    public static Direction fromControllerDirection(com.paulesson.elevator.elevatorcontrol.model.Direction from){
+    public static Direction fromControllerDirection(com.paulesson.elevator.elevatorcontrol.model.Status from){
         Direction ret;
         switch (from){
             case STOPPED:

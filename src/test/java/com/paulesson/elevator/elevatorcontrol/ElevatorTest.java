@@ -6,13 +6,15 @@
 
 package com.paulesson.elevator.elevatorcontrol;
 
-import com.paulesson.elevator.elevatorcontrol.model.Direction;
+import com.paulesson.elevator.elevatorcontrol.model.Status;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author pont
+ * Tests the Elevator class in the elevatorcontrol package
+ * 
+ * @author Paul Esson
  */
 public class ElevatorTest {
     
@@ -72,10 +74,10 @@ public class ElevatorTest {
      */
     @Test
     public void testGetSetDirection() {
-        Direction direction = Direction.UP;
+        Status direction = Status.UP;
         Elevator instance = new Elevator("A");
         instance.setDirection(direction);
-        Direction result = instance.getDirection();
+        Status result = instance.getDirection();
         assertEquals(direction, result);
     }
 

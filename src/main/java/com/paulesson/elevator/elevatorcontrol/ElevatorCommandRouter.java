@@ -1,7 +1,7 @@
 package com.paulesson.elevator.elevatorcontrol;
 
 import com.paulesson.elevator.elevatorcontrol.model.RequestCommand;
-import com.paulesson.elevator.elevatorcontrol.model.Direction;
+import com.paulesson.elevator.elevatorcontrol.model.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -102,7 +102,7 @@ public class ElevatorCommandRouter {
         e.pickUp(amtPeople);
         e.moveTo(to);
         e.dropOff(amtPeople);
-        e.setDirection(Direction.STOPPED);
+        e.setDirection(Status.STOPPED);
         markElevatorAsAvailable();
     } 
     
@@ -132,7 +132,7 @@ public class ElevatorCommandRouter {
         Elevator best = null;
         int distance, mindistance = Integer.MAX_VALUE;
         for (Elevator ele : elevators) {
-            if (ele.getDirection() == Direction.STOPPED) {
+            if (ele.getDirection() == Status.STOPPED) {
                 distance = Math.abs(ele.getCurrentFloor() - cmd.getLevelFrom());
                 if (distance < mindistance) {
                     mindistance = distance;
@@ -142,7 +142,7 @@ public class ElevatorCommandRouter {
         }
         if (best != null)
         {
-            best.setDirection(Direction.WAITING);
+            best.setDirection(Status.WAITING);
         }
         return best;
     }

@@ -48,6 +48,5 @@ public class ElevatorControllerTest {
         return elevatorListModel;
     }
     
-  
     
 }

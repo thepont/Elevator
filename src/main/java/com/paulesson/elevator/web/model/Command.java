@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Command")
 public class Command implements Serializable{
 
+    private int id;
     private int people;
     private int levelFrom;
     private int levelTo;
@@ -23,9 +24,34 @@ public class Command implements Serializable{
         this.levelTo = levelTo;
     }
     
+    public Command(com.paulesson.elevator.db.entities.Command dbEntity){
+        this.id = dbEntity.getId();
+        this.people = dbEntity.getPeople();
+        this.levelFrom = dbEntity.getFloorFrom();
+        this.levelTo = dbEntity.getFloorTo();
+    }
+    
+    public com.paulesson.elevator.db.entities.Command toDbEntity(){
+        com.paulesson.elevator.db.entities.Command entity = new com.paulesson.elevator.db.entities.Command();
+        entity.setId(id);
+        entity.setFloorFrom(levelFrom);
+        entity.setFloorTo(levelTo);
+        entity.setPeople(people);
+        return entity;
+    }
+    
     public com.paulesson.elevator.elevatorcontrol.model.RequestCommand toRequestCommand(){
         com.paulesson.elevator.elevatorcontrol.model.RequestCommand rc = new com.paulesson.elevator.elevatorcontrol.model.RequestCommand((byte)people,(short)levelFrom,(short)levelTo);
         return rc;
+    }
+    
+    public int getId()
+    {
+        return id;
+    }
+    
+    public void setId(int id){
+        this.id = id;
     }
 
     public int getPeople() {
