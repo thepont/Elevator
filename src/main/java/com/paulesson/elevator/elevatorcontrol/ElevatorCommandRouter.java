@@ -105,9 +105,11 @@ public class ElevatorCommandRouter {
         e.setDirection(Direction.STOPPED);
         markElevatorAsAvailable();
     } 
+    
     /*
     * Return a copy of the current Elevators.
     **/
+    
     public List<Elevator> getElevators()
     {
        List<Elevator> copy = new ArrayList<Elevator>();
@@ -125,6 +127,7 @@ public class ElevatorCommandRouter {
      * @param cmd command to execute
      * @return the most ideal free elevator to execute the command.
      */
+    
     synchronized protected Elevator requestElevator(RequestCommand cmd) {
         Elevator best = null;
         int distance, mindistance = Integer.MAX_VALUE;

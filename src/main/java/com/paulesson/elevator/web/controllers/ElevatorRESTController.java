@@ -6,9 +6,10 @@
 
 package com.paulesson.elevator.web.controllers;
 
-import com.paulesson.elevator.web.model.Elevator;
-import com.paulesson.elevator.web.model.Command;
+import com.paulesson.elevator.db.dao.CommandDao;
 import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
+import com.paulesson.elevator.web.model.Command;
+import com.paulesson.elevator.web.model.Elevator;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/api/elevators/")
 public class ElevatorRESTController extends ElevatorController{
     
+    CommandDao commandDao;
+    
     @Autowired
     public void setElevatorCommandRouter(ElevatorCommandRouter ecr) {
         this.ecr = ecr;
+    }
+    
+    @Autowired
+    public void CommandDao(CommandDao commandDao){
+        this.commandDao = commandDao;
     }
     
     /**
@@ -49,8 +57,28 @@ public class ElevatorRESTController extends ElevatorController{
     @RequestMapping(value = "/command", method = RequestMethod.POST)
     public @ResponseBody Boolean sendCommand(@RequestBody final Command cmd)
     {
+        com.paulesson.elevator.db.entities.Command commandEnt = new com.paulesson.elevator.db.entities.Command();
+        commandEnt.setFloorFrom(cmd.getLevelFrom());
+        commandEnt.setFloorTo(cmd.getLevelTo());
+        commandEnt.setPeople(cmd.getPeople());
+        commandDao.saveCommand(commandEnt);
         ecr.queueCommand(cmd.toRequestCommand());
         return true;
     }
     
+    @RequestMapping(value = "/command", method = RequestMethod.GET)
+    public @ResponseBody List<Command> listCommands()
+    {
+        List<Command> commands = new ArrayList<Command>();
+        List<com.paulesson.elevator.db.entities.Command> commandsEnt  = commandDao.getCommands();
+        for(com.paulesson.elevator.db.entities.Command commandEnt : commandsEnt )
+        {
+            Command cmd = new Command();
+            cmd.setLevelFrom((short)commandEnt.getFloorFrom());
+            cmd.setLevelTo(commandEnt.getFloorTo());
+            cmd.setPeople(commandEnt.getPeople());
+            commands.add(cmd);
+        }
+        return commands;
+    }
 }

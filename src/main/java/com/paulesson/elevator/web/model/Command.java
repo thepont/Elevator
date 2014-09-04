@@ -17,7 +17,7 @@ public class Command implements Serializable{
 
     public Command(){}
     
-    public Command(byte people, short levelFrom, short levelTo) {
+    public Command(int people, int levelFrom, int levelTo) {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;
@@ -40,7 +40,7 @@ public class Command implements Serializable{
         return levelFrom;
     }
 
-    public void setLevelFrom(short levelFrom) {
+    public void setLevelFrom(int levelFrom) {
         this.levelFrom = levelFrom;
     }
 

@@ -7,7 +7,6 @@
 package com.paulesson.elevator.elevatorcontrol;
 
 import com.paulesson.elevator.elevatorcontrol.model.Direction;
-import com.paulesson.elevator.elevatorcontrol.Elevator;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
