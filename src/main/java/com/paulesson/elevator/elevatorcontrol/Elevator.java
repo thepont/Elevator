@@ -5,11 +5,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.context.annotation.Scope;
+
 /**
  * This class represents a mock elevator
  *
  * @author Paul Esson
  */
+@Scope("prototype")
 public class Elevator {
 
     // Time taken to move a floor 
