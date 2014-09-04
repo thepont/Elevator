@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -13,13 +15,14 @@ import org.springframework.scheduling.annotation.Async;
  * @author Paul Esson
  */
 
-public class ElevatorCommandRouter {
+public class ElevatorCommandRouter extends Thread {
     final static int START_QUEUE_SIZE = 0;
     
     private final List<Elevator> elevators;
     private final Semaphore elevatorAvailible;
     private final Semaphore queueEmpty = new Semaphore(START_QUEUE_SIZE);
     private final ConcurrentLinkedQueue<RequestCommand> commandQueue = new ConcurrentLinkedQueue<RequestCommand>();
+    private boolean running = true;
     
     public ElevatorCommandRouter(List<Elevator> elevators)
     {
@@ -28,6 +31,34 @@ public class ElevatorCommandRouter {
         queueEmpty.drainPermits();
     }
      
+    @PostConstruct
+    public void init(){
+        this.start();
+    }
+    
+    @PreDestroy
+    public void destory(){
+        running = false;
+        this.interrupt();
+    }
+    
+    @Override
+    public void run() {
+        RequestCommand currentCommand;
+        Elevator currentElevator;
+        while(running)
+        {
+            try {
+                waitForElevatorAvailable();
+                currentCommand = waitDequeueCommand();
+                currentElevator = requestElevator(currentCommand);
+                execute(currentCommand,currentElevator);
+            } catch(InterruptedException e) {
+                
+            }
+        }
+    }
+    
     
     /**
      * Queues a command and signals any threads waiting on queue.
@@ -92,8 +123,17 @@ public class ElevatorCommandRouter {
     protected int getQueueSemephoreSize(){
         return queueEmpty.availablePermits();
     }
+    
+    /**
+     * Execute a command against an elevator
+     * 
+     * This command occurs asynchronously so the elevators can move independently.
+     * 
+     * @param cmd command to execute on the elevator 
+     * @param e elevator to execute command on.
+     */
     @Async
-    public void execute(RequestCommand cmd, Elevator e){
+    protected void execute(RequestCommand cmd, Elevator e){
         short from = cmd.getLevelFrom();
         short to = cmd.getLevelTo();
         byte amtPeople = cmd.getPeople();

@@ -1,6 +1,5 @@
 package com.paulesson.elevator.config;
 
-import com.paulesson.elevator.elevatorcontrol.CommandProcessingThread;
 import com.paulesson.elevator.elevatorcontrol.Elevator;
 import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
 import java.util.ArrayList;
@@ -42,13 +41,6 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         }
         ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
         return ecr;
-    }
-    
-    @Bean
-    public CommandProcessingThread setupCommandProcessingThread(){
-        CommandProcessingThread cpt = new CommandProcessingThread();
-        //cpt.start();
-        return cpt;
     }
     
     @Override
