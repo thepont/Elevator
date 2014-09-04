@@ -17,19 +17,18 @@ public class Elevator {
     private static final Direction INITAL_DIRECTION = Direction.STOPPED;
     private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 1;
-    private static final byte DEFAULT_CAPACITY = 20;
     
     private static final int TOP_FLOOR = 10;
     private static final int BOTTOM_FLOOR = 1;
 
+    public static final byte CAPACITY = 20;
+    
     private final String name;
-
+    
     private final AtomicInteger currentFloor;
     private final AtomicInteger allocatedLoad;
     private final AtomicInteger load;
-
-    private final byte capacity;
-
+    
     private AtomicReference<Direction> direction;
 
     public Elevator(String name) {
@@ -40,7 +39,6 @@ public class Elevator {
         this.load = new AtomicInteger(INIT_LOAD);
         this.direction = new AtomicReference<Direction>();
         this.direction.set(INITAL_DIRECTION);
-        this.capacity = DEFAULT_CAPACITY;
     }
 
     /**
@@ -50,7 +48,6 @@ public class Elevator {
     public Elevator(Elevator elevator) {
         this.name = elevator.name;
         this.currentFloor = elevator.currentFloor;
-        this.capacity = elevator.capacity;
         this.load = elevator.load;
         this.allocatedLoad = elevator.allocatedLoad;
         this.direction = elevator.direction;
@@ -68,9 +65,7 @@ public class Elevator {
         this.currentFloor.set(currentFloor);
     }
 
-    public byte getCapacity() {
-        return capacity;
-    }
+
 
     public int getLoad() {
         return load.get();
@@ -101,7 +96,6 @@ public class Elevator {
         int hash = 3;
         hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 37 * hash + (this.name != null ? this.currentFloor.hashCode() : 0);
-        hash = 37 * hash + this.capacity;
         hash = 37 * hash + (this.name != null ? this.load.hashCode() : 0);
         hash = 37 * hash + (this.name != null ? this.allocatedLoad.hashCode() : 0);
         hash = 37 * hash + (this.direction != null ? this.direction.hashCode() : 0);
@@ -123,9 +117,6 @@ public class Elevator {
         }
 
         if (this.currentFloor != other.currentFloor) {
-            return false;
-        }
-        if (this.capacity != other.capacity) {
             return false;
         }
         if (this.load != other.load) {

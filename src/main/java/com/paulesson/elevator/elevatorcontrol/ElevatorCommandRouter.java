@@ -133,7 +133,7 @@ public class ElevatorCommandRouter extends Thread {
      * @param e elevator to execute command on.
      */
     @Async
-    protected void execute(RequestCommand cmd, Elevator e){
+    public void execute(RequestCommand cmd, Elevator e){
         short from = cmd.getLevelFrom();
         short to = cmd.getLevelTo();
         byte amtPeople = cmd.getPeople();
@@ -159,28 +159,27 @@ public class ElevatorCommandRouter extends Thread {
     
     /**
      * requests an elevator
-     * @param cmd
-     * @return 
+     * 
+     * this method is synchronized so multiple 'executes' do not get the same elevator. 
+     * 
+     * @param cmd command to execute
+     * @return the most ideal free elevator to execute the command.
      */
-    
-    Elevator requestElevator(RequestCommand cmd)
-    {
+    synchronized protected Elevator requestElevator(RequestCommand cmd) {
         Elevator best = null;
-        short distance, mindistance = Short.MAX_VALUE;
-        for(Elevator ele: elevators)
-        {
-            if(ele.getDirection() == Direction.STOPPED)
-            {
-                if(ele.getAllocatedLoad() + cmd.getPeople() < ele.getCapacity())
-                {
-                    distance = (short)Math.abs(ele.getCurrentFloor() - cmd.getLevelFrom());  
-                    if( distance < mindistance)
-                    {
-                        mindistance = distance;
-                        best = ele;
-                    }
+        int distance, mindistance = Integer.MAX_VALUE;
+        for (Elevator ele : elevators) {
+            if (ele.getDirection() == Direction.STOPPED) {
+                distance = Math.abs(ele.getCurrentFloor() - cmd.getLevelFrom());
+                if (distance < mindistance) {
+                    mindistance = distance;
+                    best = ele;
                 }
             }
+        }
+        if (best != null)
+        {
+            best.setDirection(Direction.WAITING);
         }
         return best;
     }

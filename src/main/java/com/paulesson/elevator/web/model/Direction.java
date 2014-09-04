@@ -12,7 +12,24 @@ public enum Direction  implements Serializable{
     STOPPED,UP,DOWN;
 
     public static Direction fromControllerDirection(com.paulesson.elevator.elevatorcontrol.model.Direction from){
-        Direction ret = Direction.valueOf(from.name());
+        Direction ret;
+        switch (from){
+            case STOPPED:
+                ret = Direction.STOPPED;
+                break;
+            case UP:
+                ret = Direction.UP;
+                break;
+            case DOWN:
+                ret = Direction.DOWN;
+                break;
+            case WAITING:
+                ret = Direction.STOPPED;
+                break;
+            default:
+                ret = Direction.STOPPED;
+                break;
+        }
         return ret;
     }
 }

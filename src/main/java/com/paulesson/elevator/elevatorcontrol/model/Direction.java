@@ -11,6 +11,6 @@ package com.paulesson.elevator.elevatorcontrol.model;
  * @author Paul Esson
  */
 public enum Direction{
-    STOPPED,UP,DOWN
+    STOPPED,UP,DOWN,WAITING
 }
     
