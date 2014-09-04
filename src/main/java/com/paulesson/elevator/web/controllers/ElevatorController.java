@@ -3,6 +3,7 @@ package com.paulesson.elevator.web.controllers;
 import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
 import com.paulesson.elevator.web.model.Elevator;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,30 +15,27 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Paul Esson
  */
 
-
-
-@Controller
-@RequestMapping("/")
 public class ElevatorController {
-    protected static final String SHOW_ELEVATORS_PAGE = "index";
-    protected static final String MODEL_ELEVATORS_LIST_NAME = "elevators";
+
     
-    private ElevatorCommandRouter ecr;
+   protected ElevatorCommandRouter ecr;
     
-   @Autowired
-    void setElevatorCommandRouter(ElevatorCommandRouter ecr){
+    @Autowired
+    void setElevatorCommandRouter(ElevatorCommandRouter ecr) {
         this.ecr = ecr;
     }
-    
-    
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView showElevators(){
+    /**
+     * Gets elevators from ElevatorCommandRouter and returns rest model of the elevators.
+     * @return list of elevators.
+     */
+    protected List<Elevator> getRESTElevators(){
         ArrayList<Elevator> elevators = new ArrayList<Elevator>();
         for(com.paulesson.elevator.elevatorcontrol.Elevator el : ecr.getElevators()){
             elevators.add(new Elevator(el));
         }
-        ModelAndView model = new ModelAndView(SHOW_ELEVATORS_PAGE);
-        model.addObject(MODEL_ELEVATORS_LIST_NAME, elevators);
-        return model;
+        return elevators;
     }
+    
+    
+
 }

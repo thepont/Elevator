@@ -24,15 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/api/elevators/")
-public class ElevatorRESTController {
-    
-    private ElevatorCommandRouter ecr;
-    
-   @Autowired
-    void setElevatorCommandRouter(ElevatorCommandRouter ecr){
-        this.ecr = ecr;
-    }
-    
+public class ElevatorRESTController extends ElevatorController{
     
     /**
      * Get the list of elevators and their current locations.
@@ -41,12 +33,7 @@ public class ElevatorRESTController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public @ResponseBody List<Elevator> getElevators()
     {
-       List<com.paulesson.elevator.elevatorcontrol.Elevator> elevators = ecr.getElevators();
-       List<Elevator> copy = new ArrayList<Elevator>();
-       for(com.paulesson.elevator.elevatorcontrol.Elevator ele : elevators){
-           copy.add(new Elevator(ele));
-       } 
-       return copy;
+       return getRESTElevators();
     }
     
     /**

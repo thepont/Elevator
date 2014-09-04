@@ -8,19 +8,17 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 @EnableAsync
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.paulesson.elevate.mvc.controllers"})
+@ComponentScan(basePackages = {"com.paulesson.elevator.web.controllers"})
 public class WebAppContext extends WebMvcConfigurerAdapter {
 
     public static int NUMBER_ELEVATORS = 4;
