@@ -1,4 +1,4 @@
-package com.paulesson.elevator.RESTModel;
+package com.paulesson.elevator.web.model;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public enum Direction  implements Serializable{
     STOPPED,UP,DOWN;
 
-    public static Direction fromControllerDirection(com.paulesson.elevator.Direction from){
+    public static Direction fromControllerDirection(com.paulesson.elevator.elevatorcontrol.model.Direction from){
         Direction ret = Direction.valueOf(from.name());
         return ret;
     }

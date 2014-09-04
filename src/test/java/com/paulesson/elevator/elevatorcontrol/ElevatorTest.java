@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package com.paulesson.elevator;
+package com.paulesson.elevator.elevatorcontrol;
 
+import com.paulesson.elevator.elevatorcontrol.model.Direction;
+import com.paulesson.elevator.elevatorcontrol.Elevator;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -158,11 +160,38 @@ public class ElevatorTest {
      */
     @Test
     public void testMoveTo() {
-        int floor = 5, result;
+        int floor = 10, result;
         Elevator instance = new Elevator("A");
         instance.moveTo(floor);
         result = instance.getCurrentFloor();
         assertEquals(floor, result);
     }
     
+    /**
+     * Test of moveTo method, of class Elevator.
+     */
+    @Test
+    public void testMoveToOnInvalidHighFloor() {
+        int floor = 50, result;
+        int expectedResult = 1;
+        Elevator instance = new Elevator("A");
+        instance.setCurrentFloor(expectedResult);
+        instance.moveTo(floor);
+        result = instance.getCurrentFloor();
+        assertEquals(expectedResult, result);
+    }
+    
+    /**
+     * Test of moveTo method, of class Elevator.
+     */
+    @Test
+    public void testMoveToOnInvalidLowFloor() {
+        int floor = 0, result;
+        int expectedResult = 1;
+        Elevator instance = new Elevator("A");
+        instance.setCurrentFloor(expectedResult);
+        instance.moveTo(floor);
+        result = instance.getCurrentFloor();
+        assertEquals(expectedResult, result);
+    }
 }

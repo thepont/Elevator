@@ -1,11 +1,11 @@
-package com.paulesson.elevator;
+package com.paulesson.elevator.elevatorcontrol;
 
+import com.paulesson.elevator.elevatorcontrol.model.RequestCommand;
+import com.paulesson.elevator.elevatorcontrol.model.Direction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
-import javax.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -19,9 +19,7 @@ public class ElevatorCommandRouter {
     private final List<Elevator> elevators;
     private final Semaphore elevatorAvailible;
     private final Semaphore queueEmpty = new Semaphore(START_QUEUE_SIZE);
-    
-    private ConcurrentLinkedQueue<RequestCommand> commandQueue = new ConcurrentLinkedQueue<RequestCommand>();
-    private boolean running = true;
+    private final ConcurrentLinkedQueue<RequestCommand> commandQueue = new ConcurrentLinkedQueue<RequestCommand>();
     
     public ElevatorCommandRouter(List<Elevator> elevators)
     {
@@ -30,14 +28,6 @@ public class ElevatorCommandRouter {
         queueEmpty.drainPermits();
     }
      
-    /**
-     * Release semaphores and kill thread.
-     */
-    @PreDestroy
-    public void destory(){
-        queueEmpty.release();
-        running = false;
-    }
     
     /**
      * Queues a command and signals any threads waiting on queue.

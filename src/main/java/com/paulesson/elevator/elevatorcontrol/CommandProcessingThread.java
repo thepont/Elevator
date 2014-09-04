@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package com.paulesson.elevator;
+package com.paulesson.elevator.elevatorcontrol;
 
+import com.paulesson.elevator.elevatorcontrol.model.RequestCommand;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,10 +19,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandProcessingThread extends Thread {
 
-    @Autowired
+    
     ElevatorCommandRouter ecr;
     
     boolean running = true;
+    
+    @Autowired
+    void setElevatorCommandRouter(ElevatorCommandRouter ecr){
+        this.ecr = ecr;
+    }
     
     @PostConstruct
     public void init(){

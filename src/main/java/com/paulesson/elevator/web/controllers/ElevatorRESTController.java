@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-package com.paulesson.elevate.mvc.controllers;
+package com.paulesson.elevator.web.controllers;
 
-import com.paulesson.elevator.ElevatorCommandRouter;
-import com.paulesson.elevator.RESTModel.*;
+import com.paulesson.elevator.web.model.Elevator;
+import com.paulesson.elevator.web.model.Command;
+import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/api/elevators/")
 public class ElevatorRESTController {
     
-    @Autowired
     private ElevatorCommandRouter ecr;
+    
+   @Autowired
+    void setElevatorCommandRouter(ElevatorCommandRouter ecr){
+        this.ecr = ecr;
+    }
+    
+    
     /**
      * Get the list of elevators and their current locations.
      * @return list of current elevator status.
@@ -34,9 +41,9 @@ public class ElevatorRESTController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public @ResponseBody List<Elevator> getElevators()
     {
-       List<com.paulesson.elevator.Elevator> elevators = ecr.getElevators();
+       List<com.paulesson.elevator.elevatorcontrol.Elevator> elevators = ecr.getElevators();
        List<Elevator> copy = new ArrayList<Elevator>();
-       for(com.paulesson.elevator.Elevator ele : elevators){
+       for(com.paulesson.elevator.elevatorcontrol.Elevator ele : elevators){
            copy.add(new Elevator(ele));
        } 
        return copy;

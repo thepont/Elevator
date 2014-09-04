@@ -1,4 +1,4 @@
-package com.paulesson.elevator.RESTModel;
+package com.paulesson.elevator.web.model;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -23,8 +23,8 @@ public class Command implements Serializable{
         this.levelTo = levelTo;
     }
     
-    public com.paulesson.elevator.RequestCommand toRequestCommand(){
-        com.paulesson.elevator.RequestCommand rc = new com.paulesson.elevator.RequestCommand((byte)people,(short)levelFrom,(short)levelTo);
+    public com.paulesson.elevator.elevatorcontrol.model.RequestCommand toRequestCommand(){
+        com.paulesson.elevator.elevatorcontrol.model.RequestCommand rc = new com.paulesson.elevator.elevatorcontrol.model.RequestCommand((byte)people,(short)levelFrom,(short)levelTo);
         return rc;
     }
 

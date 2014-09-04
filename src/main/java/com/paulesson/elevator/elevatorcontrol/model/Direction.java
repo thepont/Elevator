@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.paulesson.elevator;
+package com.paulesson.elevator.elevatorcontrol.model;
 
 /**
  * Represents the direction the elevator is traveling.

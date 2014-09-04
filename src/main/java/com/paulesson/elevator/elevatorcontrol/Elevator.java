@@ -1,5 +1,6 @@
-package com.paulesson.elevator;
+package com.paulesson.elevator.elevatorcontrol;
 
+import com.paulesson.elevator.elevatorcontrol.model.Direction;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -20,6 +21,9 @@ public class Elevator {
     private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 1;
     private static final byte DEFAULT_CAPACITY = 20;
+    
+    private static final int TOP_FLOOR = 10;
+    private static final int BOTTOM_FLOOR = 1;
 
     private final String name;
 
@@ -63,7 +67,7 @@ public class Elevator {
         return currentFloor.get();
     }
 
-    public void setCurrentFloor(int currentFloor) {
+    protected void setCurrentFloor(int currentFloor) {
         this.currentFloor.set(currentFloor);
     }
 
@@ -75,7 +79,7 @@ public class Elevator {
         return load.get();
     }
 
-    public void setLoad(int load) {
+    protected void setLoad(int load) {
         this.load.set(load);
     }
 
@@ -83,7 +87,7 @@ public class Elevator {
         return allocatedLoad.get();
     }
 
-    public void setAllocatedLoad(int allocatedLoad) {
+    protected void setAllocatedLoad(int allocatedLoad) {
         this.allocatedLoad.set(allocatedLoad);
     }
 
@@ -91,7 +95,7 @@ public class Elevator {
         return direction.get();
     }
 
-    public void setDirection(Direction direction) {
+    protected void setDirection(Direction direction) {
         this.direction.set(direction);
     }
 
@@ -154,7 +158,7 @@ public class Elevator {
      * Moves elevator up a floor
      * @return the updated floor
      */
-    public int moveUpFloor() {
+    protected int moveUpFloor() {
         delayLift();
         return currentFloor.incrementAndGet();
     }
@@ -163,7 +167,7 @@ public class Elevator {
      * Moves elevator down a floor
      * @return the updated floor;
      */
-    public int moveDownFloor() {
+    protected int moveDownFloor() {
         delayLift();
         return currentFloor.decrementAndGet();
     }
@@ -173,7 +177,7 @@ public class Elevator {
      * @param amt amount of people to pick up
      * @return amount of people in the lift
      */
-    public int pickUp(int amt) {
+    protected int pickUp(int amt) {
         delayLift();
         return load.addAndGet(amt);
     }
@@ -183,7 +187,7 @@ public class Elevator {
      * @param amt amount of people to drop off
      * @return amount of people in the lift
      */
-    public int dropOff(int amt) {
+    protected int dropOff(int amt) {
         delayLift();
         return load.addAndGet(-amt);
     }
@@ -193,6 +197,8 @@ public class Elevator {
      * @param floor floor to move elevator to
      */
     public void moveTo(int floor) {
+        if ( floor > TOP_FLOOR || floor < BOTTOM_FLOOR)
+            return;
         while (currentFloor.get() != floor) {
             if (currentFloor.get() < floor) {
                 direction.lazySet(Direction.UP);

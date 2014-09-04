@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.paulesson.elevator.RESTModel;
+package com.paulesson.elevator.web.model;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,13 +18,14 @@ public class Elevator implements Serializable{
     
 
     
-    public Elevator(com.paulesson.elevator.Elevator from){
+    public Elevator(com.paulesson.elevator.elevatorcontrol.Elevator from){
         this.direction = Direction.fromControllerDirection(from.getDirection());
         this.currentFloor = from.getCurrentFloor();
         this.numPeople = from.getLoad();
         this.name = from.getName();
     }
     
+
     public Elevator(){}
     
     private Direction direction;
@@ -62,6 +63,41 @@ public class Elevator implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + (this.direction != null ? this.direction.hashCode() : 0);
+        hash = 97 * hash + this.currentFloor;
+        hash = 97 * hash + this.numPeople;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Elevator other = (Elevator) obj;
+        if (this.direction != other.direction) {
+            return false;
+        }
+        if (this.currentFloor != other.currentFloor) {
+            return false;
+        }
+        if (this.numPeople != other.numPeople) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
     
 }

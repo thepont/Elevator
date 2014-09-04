@@ -1,8 +1,8 @@
 package com.paulesson.elevator.config;
 
-import com.paulesson.elevator.CommandProcessingThread;
-import com.paulesson.elevator.Elevator;
-import com.paulesson.elevator.ElevatorCommandRouter;
+import com.paulesson.elevator.elevatorcontrol.CommandProcessingThread;
+import com.paulesson.elevator.elevatorcontrol.Elevator;
+import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
