@@ -57,7 +57,10 @@ public class Elevator {
             this.direction.set(INITAL_DIRECTION);
         }
     }
-    
+    /**
+     * Convert Threadsafe Elevator Object into Database Entity.
+     * @return 
+     */
     public com.paulesson.elevator.db.entities.Elevator toDBEntity(){
         com.paulesson.elevator.db.entities.Elevator entity = new com.paulesson.elevator.db.entities.Elevator();
         entity.setId(dbId);

@@ -121,24 +121,30 @@ public class ElevatorCommandRouter {
     protected int getQueueSemephoreSize(){
         return queueEmpty.availablePermits();
     }
+    /**
+     * Executes a command on an elevator.
+     * @param cmd command to execute
+     * @param e elevator to execute command on.
+     */
     @Async
-    public void execute(RequestCommand cmd, Elevator e){
-        short from = cmd.getLevelFrom();
-        short to = cmd.getLevelTo();
-        byte amtPeople = cmd.getPeople();
+    protected void execute(RequestCommand cmd, Elevator e){
+        int from = cmd.getLevelFrom();
+        int to = cmd.getLevelTo();
+        int amtPeople = cmd.getPeople();
 
         e.moveTo(from);
         e.pickUp(amtPeople);
         e.moveTo(to);
         e.dropOff(amtPeople);
         e.setDirection(Status.STOPPED);
-        elevatorDao.saveElevator(e.toDBEntity());
+        elevatorDao.updateElevator(e.toDBEntity());
         markElevatorAsAvailable();
     } 
     
-    /*
+    /**
     * Return a copy of the current Elevators.
-    **/
+     * @return copy of the current elevators.
+    */
     
     public List<Elevator> getElevators()
     {

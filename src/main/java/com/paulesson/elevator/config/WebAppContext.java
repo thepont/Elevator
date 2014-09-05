@@ -72,6 +72,10 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         return resolver;
     }
     
+    /**
+     * Bean used to route commands to elevators and store elevators status in DB
+     * @return the command router.
+     */
     @Bean
     public ElevatorCommandRouter setupCommandRouter(){
         
@@ -88,12 +92,20 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         return ecr;
     }
     
+    /**
+     * Thread used to monitor elevator command queue
+     * @return the command processing thread
+     */
+    
     @Bean
     public CommandProcessingThread setupCommandProcessingThread(){
         CommandProcessingThread cpt = new CommandProcessingThread();
         return cpt;
     }
-    //DataSource
+    /**
+     * JDBC DataSource that we we wish to connect to 
+     * @return JDBC datasource
+     */
     @Bean
     public DriverManagerDataSource setupDataSource(){
         DriverManagerDataSource dmds = new DriverManagerDataSource();
@@ -103,7 +115,10 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         dmds.setPassword(JDBC_DB_PASSWORD);
         return dmds;
     }
-    
+    /**
+     * Hibernate session factory
+     * @return the hibinate session factory.
+     */
     @Bean
     public AnnotationSessionFactoryBean getSessionFactory()
     {
@@ -121,7 +136,10 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         sessionFactory.setHibernateProperties(hibernateProps);
         return sessionFactory;
     }
-    
+    /**
+     * Data access object for commands.
+     * @return Command DAO
+     */
     @Bean
     public CommandDao setupCommandDao(){
         CommandDao commandDao = new CommandDaoImpl();
@@ -129,12 +147,20 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         return commandDao;
     }
     
+     /** Data access object for elevators.
+     * @return Elevator DAO
+     */
+    
     @Bean
     public ElevatorDao setupElevatorDao(){
         ElevatorDao elevatorDao = new ElevatorDaoImpl() {};
         ((ElevatorDaoImpl)elevatorDao).setSessionFactory(getSessionFactory().getObject());
         return elevatorDao;
     }
+     /** 
+      * Setup our resource handlers
+     */
+    
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

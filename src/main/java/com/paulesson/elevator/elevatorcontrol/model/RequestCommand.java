@@ -7,36 +7,59 @@ package com.paulesson.elevator.elevatorcontrol.model;
  */
 public class RequestCommand {
 
-    private byte people;
-    private short levelFrom;
-    private short levelTo;
+    private int people;
+    private int levelFrom;
+    private int levelTo;
 
-    public RequestCommand(byte people, short levelFrom, short levelTo) {
+    public RequestCommand(int people, int levelFrom, int levelTo) {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;
     }
 
-    public byte getPeople() {
+    /**
+     * 
+     * @return the amount of people in the request for an elevator.
+     */
+    
+    public int getPeople() {
         return people;
     }
 
+    /**
+     * 
+     * @param people the amount of people in the request for an elevator.
+     */
     public void setPeople(byte people) {
         this.people = people;
     }
-
-    public short getLevelFrom() {
+    /**
+     * @return The level the elevator is requested from
+     */
+    public int getLevelFrom() {
         return levelFrom;
     }
 
+    /**
+     * 
+     * @param levelFrom The level the elevator is requested from
+     */
     public void setLevelFrom(short levelFrom) {
         this.levelFrom = levelFrom;
     }
+    /**
+     * 
+     * @return The level the elevator is requested to.
+     */
 
-    public short getLevelTo() {
+    public int getLevelTo() {
         return levelTo;
     }
 
+    /**
+     * @param levelTo The level the elevator is requested to.
+     */
+    
     public void setLevelTo(short levelTo) {
         this.levelTo = levelTo;
     }

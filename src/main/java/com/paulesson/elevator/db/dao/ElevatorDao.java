@@ -10,4 +10,5 @@ public interface ElevatorDao {
     public void saveElevator(Elevator elevator);
     public Elevator getElevator(int id);
     public Elevator getOrCreate(int id, String name);
+    public void updateElevator(Elevator elevator);
 }

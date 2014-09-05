@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.paulesson.elevator.db.dao;
 
 import com.paulesson.elevator.db.entities.Elevator;
@@ -32,6 +26,19 @@ public abstract class ElevatorDaoImpl implements ElevatorDao {
         tx.commit();
         session.close();
     }
+    @Override
+    public void updateElevator(Elevator elevator){
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction(); 
+        Elevator persisted = (Elevator)session.load(Elevator.class, elevator.getId());
+        persisted.setLoad(elevator.getLoad());
+        persisted.setStatus(elevator.getStatus());
+        persisted.setCurrentFloor(elevator.getCurrentFloor());
+        session.persist(persisted);
+        tx.commit();
+        session.close();
+        
+    }
 
     @Override
     public Elevator getElevator(int id) {
@@ -45,6 +52,17 @@ public abstract class ElevatorDaoImpl implements ElevatorDao {
         return returned;
     }
     
+    protected Elevator createElevator(int id, String name)
+    {
+        Elevator returned;
+        returned = new Elevator();
+        returned.setId(id);
+        returned.setName(name);
+        saveElevator(returned);
+        return returned;
+    }
+            
+    
     @Override
     public Elevator getOrCreate(int id, String name) {
         Elevator returned;
@@ -52,13 +70,7 @@ public abstract class ElevatorDaoImpl implements ElevatorDao {
             returned = getElevator(id);
         } catch (org.hibernate.ObjectNotFoundException e)
         {
-            returned = new Elevator();
-            returned.setId(id);
-            returned.setName(name);
-        }
-        if( returned == null)
-        {
-            saveElevator(returned);
+            returned = createElevator(id, name);
         }
         return returned;
     }

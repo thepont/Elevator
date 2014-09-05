@@ -18,12 +18,21 @@ public class Command implements Serializable{
 
     public Command(){}
     
+    /**
+     * Create a new command.
+     * @param people amount of people who are requesting an elevator.
+     * @param levelFrom the level the elevator has to pick people up
+     * @param levelTo  the level the elevator has to drop people off
+     */
     public Command(int people, int levelFrom, int levelTo) {
         this.people = people;
         this.levelFrom = levelFrom;
         this.levelTo = levelTo;
     }
-    
+    /**
+     * Create a REST Command model from a DBEntity.
+     * @param dbEntity dbEntity to create command from.
+     */
     public Command(com.paulesson.elevator.db.entities.Command dbEntity){
         this.id = dbEntity.getId();
         this.people = dbEntity.getPeople();
@@ -31,6 +40,10 @@ public class Command implements Serializable{
         this.levelTo = dbEntity.getFloorTo();
     }
     
+    /**
+     * Create a DB entity from a command.
+     * @return DB Enity of the command.
+     */
     public com.paulesson.elevator.db.entities.Command toDbEntity(){
         com.paulesson.elevator.db.entities.Command entity = new com.paulesson.elevator.db.entities.Command();
         entity.setId(id);
