@@ -28,8 +28,8 @@
             var lastKnowDirection = {};
                     
             <c:forEach items="${elevators}" var="elevator">
-                lastKnowLocation[${elevator.name}]= ${elevator.currentFloor};
-                lastKnowDirection[${elevator.name}]= "${elevator.direction}";
+                lastKnowLocation["${elevator.name}"]= ${elevator.currentFloor};
+                lastKnowDirection["${elevator.name}"]= "${elevator.direction}";
             </c:forEach>
             
             var statusCurrent;
@@ -61,13 +61,13 @@
                         var s= document.getElementById("F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name);
                         var iconLBL = "F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name + "Icon";
                         if(liftStatus[i].direction === "DOWN"){
-                            s.innerHTML = "<span class='glyphicon glyphicon-chevron-down' id='"+iconLBL+"'></span>";
+                            s.innerHTML = liftStatus[i].numPeople + " <span class='glyphicon glyphicon-chevron-down' id='"+iconLBL+"'></span>";
                            
                         } else if(liftStatus[i].direction === "UP"){
-                            s.innerHTML = "<span class='glyphicon glyphicon-chevron-up' id='"+iconLBL+"'></span>";
+                            s.innerHTML = liftStatus[i].numPeople + "<span class='glyphicon glyphicon-chevron-up' id='"+iconLBL+"'></span>";
                             
                         } else {
-                            s.innerHTML = "<span class='glyphicon glyphicon-stop' id='"+iconLBL+"'></span>";
+                            s.innerHTML = liftStatus[i].numPeople + "<span class='glyphicon glyphicon-stop' id='"+iconLBL+"'></span>";
                             
                         }
 
@@ -198,12 +198,13 @@
                 <c:forEach items="${elevators}" var="elevator">
                     <div class="FloorShaft" id="F${floor}E${elevator.name}">
                     <c:if test="${elevator.currentFloor == floor}" >
+                        ${elevator.numPeople}
                         <c:choose>
                             <c:when test="${elevator.direction == 'UP'}">
                                 <span class="glyphicon glyphicon-chevron-up" id="F${floor}E${elevator.name}Icon"></span>
                             </c:when>
                             <c:when test="${elevator.direction == 'DOWN'}">
-                                <span class="glyphicon glyphicon-chevron-down" id="F${floor}E${elevator.name}Icon></span>
+                                <span class="glyphicon glyphicon-chevron-down" id="F${floor}E${elevator.name}Icon"></span>
                             </c:when>
                             <c:when test="${elevator.direction == 'STOPPED'}">
                                 <span class="glyphicon glyphicon-stop"  id="F${floor}E${elevator.name}Icon"></span>

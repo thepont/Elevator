@@ -21,7 +21,7 @@ public class Command {
     private int people;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID", unique = true, nullable = false)
     public int getId() {
         return id;

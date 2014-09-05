@@ -11,9 +11,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 /**
@@ -21,13 +20,14 @@ import javax.persistence.Table;
  * @author Paul Esson
  */
 @Entity
-@Table(name = "COMMAND")
+@Table(name = "ELEVATOR")
 public class Elevator {
     private int id;
     private String name;
-    private int currentFloor;
-    private int load;
-    Status status;
+    private int currentFloor = 1;
+    private int load = 0;
+    Status status = Status.STOPPED;
+    
     
     @Id
     @Column(name = "ID", unique = true, nullable = false)
@@ -48,7 +48,7 @@ public class Elevator {
         this.name = name;
     } 
     
-    @Column(name = "FLOOR", nullable = false, columnDefinition = "tinyint(1) default 1")
+    @Column(name = "FLOOR", nullable = false, columnDefinition = "int default 1")
     public int getCurrentFloor() {
         return currentFloor;
     }
@@ -57,7 +57,7 @@ public class Elevator {
         this.currentFloor = currentFloor;
     }
     
-    @Column(name = "LOAD", nullable = false)
+    @Column(name = "LOAD", nullable = false, columnDefinition = "int default 0")
     public int getLoad() {
         return load;
     }
@@ -66,7 +66,7 @@ public class Elevator {
         this.load = load;
     }
 
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return status;
