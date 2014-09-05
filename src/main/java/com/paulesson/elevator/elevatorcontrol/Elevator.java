@@ -8,15 +8,12 @@ import java.util.logging.Logger;
 import org.springframework.context.annotation.Scope;
 
 /**
- * This class represents a mock elevator
+ * This class represents a mock elevator that can move up and down floors.
  *
  * @author Paul Esson
  */
-@Scope("prototype")
 public class Elevator {
-
-    // Time taken to move a floor 
-    private static final long LIFT_DELAY = 500L;
+    private static final long MOVEMENT_DELAY     = 500L;
     private static final Status INITAL_DIRECTION = Status.STOPPED;
     private static final int INIT_LOAD = 0;
     private static final short INIT_FLOOR = 1;
@@ -26,17 +23,18 @@ public class Elevator {
 
     public static final byte CAPACITY = 20;
     
+    private int dbId;
     private final String name;
     
     private final AtomicInteger currentFloor;
     private final AtomicInteger allocatedLoad;
     private final AtomicInteger load;
     
-    private AtomicReference<Status> direction;
+    private final AtomicReference<Status> direction;
 
-    public Elevator(String name) {
+    public Elevator(String name, int dbId) {
         this.name = name;
-
+        this.dbId = dbId;
         this.allocatedLoad = new AtomicInteger(INIT_LOAD);
         this.currentFloor = new AtomicInteger(INIT_FLOOR);
         this.load = new AtomicInteger(INIT_LOAD);
@@ -44,6 +42,22 @@ public class Elevator {
         this.direction.set(INITAL_DIRECTION);
     }
 
+    public Elevator(com.paulesson.elevator.db.entities.Elevator e)
+    {
+        this.dbId = e.getId();
+        this.name = e.getName();
+        this.allocatedLoad = new AtomicInteger(INIT_LOAD);
+        this.currentFloor = new AtomicInteger(e.getCurrentFloor());
+        this.load = new AtomicInteger(e.getLoad());
+        this.direction = new AtomicReference<Status>();
+        if ( e.getStatus() != null )
+        {
+            this.direction.set(e.getStatus());   
+        } else{
+            this.direction.set(INITAL_DIRECTION);
+        }
+    }
+    
     /**
      * Elevator copy constructor
      * @param elevator original Elevator to copy
@@ -68,8 +82,6 @@ public class Elevator {
         this.currentFloor.set(currentFloor);
     }
 
-
-
     public int getLoad() {
         return load.get();
     }
@@ -93,6 +105,16 @@ public class Elevator {
     protected void setDirection(Status direction) {
         this.direction.set(direction);
     }
+
+    public int getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(int dbId) {
+        this.dbId = dbId;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -135,11 +157,11 @@ public class Elevator {
     }
 
     /**
-     * Delays lift, used to simulate real life elevator conditions.
+     * Delays the elevator for MOVEMENT_DELAY, this used to simulate real life elevator conditions.
     */
-    private void delayLift() {
+    private void delayElevator() {
         try {
-            Thread.sleep(LIFT_DELAY);
+            Thread.sleep(MOVEMENT_DELAY);
         } catch (InterruptedException ex) {
             Logger.getLogger(Elevator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -150,7 +172,7 @@ public class Elevator {
      * @return the updated floor
      */
     protected int moveUpFloor() {
-        delayLift();
+        delayElevator();
         return currentFloor.incrementAndGet();
     }
 
@@ -159,7 +181,7 @@ public class Elevator {
      * @return the updated floor;
      */
     protected int moveDownFloor() {
-        delayLift();
+        delayElevator();
         return currentFloor.decrementAndGet();
     }
 
@@ -169,7 +191,7 @@ public class Elevator {
      * @return amount of people in the lift
      */
     protected int pickUp(int amt) {
-        delayLift();
+        delayElevator();
         return load.addAndGet(amt);
     }
 
@@ -179,7 +201,7 @@ public class Elevator {
      * @return amount of people in the lift
      */
     protected int dropOff(int amt) {
-        delayLift();
+        delayElevator();
         return load.addAndGet(-amt);
     }
 

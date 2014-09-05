@@ -13,6 +13,10 @@ public enum Direction  implements Serializable{
 
     public static Direction fromControllerDirection(com.paulesson.elevator.elevatorcontrol.model.Status from){
         Direction ret;
+        if ( from == null )
+        {
+            ret = Direction.STOPPED;
+        }
         switch (from){
             case STOPPED:
                 ret = Direction.STOPPED;

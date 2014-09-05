@@ -26,7 +26,7 @@ public class ElevatorTest {
      */
     @Test
     public void testGetName() {
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         String expResult = "A";
         String result = instance.getName();
         assertEquals(expResult, result);
@@ -38,7 +38,7 @@ public class ElevatorTest {
     @Test
     public void testGetCurrentFloor() {
         int floor = 3;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setCurrentFloor(floor);
         int result = instance.getCurrentFloor();
         assertEquals(floor, result);
@@ -50,7 +50,7 @@ public class ElevatorTest {
     @Test
     public void testGetSetLoad() {
         int load = 20;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setLoad(load);
         int result = instance.getLoad();
         assertEquals(load, result);
@@ -62,7 +62,7 @@ public class ElevatorTest {
     @Test
     public void testGetSetAllocatedLoad() {
         int allocatedLoad = 20;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setAllocatedLoad(allocatedLoad);
         int result = instance.getAllocatedLoad();
         assertEquals(allocatedLoad, result);
@@ -75,7 +75,7 @@ public class ElevatorTest {
     @Test
     public void testGetSetDirection() {
         Status direction = Status.UP;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setDirection(direction);
         Status result = instance.getDirection();
         assertEquals(direction, result);
@@ -86,7 +86,7 @@ public class ElevatorTest {
      */
     @Test
     public void testEqualsSuccess() {
-        Object obj = new Elevator("A");
+        Object obj = new Elevator("A",0);
         Elevator instance = new Elevator((Elevator)obj);
         boolean expResult = true;
         boolean result = instance.equals(obj);
@@ -98,8 +98,8 @@ public class ElevatorTest {
      */
     @Test
     public void testEqualsFail() {
-        Object obj = new Elevator("B");
-        Elevator instance = new Elevator("A");
+        Object obj = new Elevator("B",0);
+        Elevator instance = new Elevator("A",0);
         boolean expResult = false;
         boolean result = instance.equals(obj);
         assertEquals(expResult, result);
@@ -111,7 +111,7 @@ public class ElevatorTest {
     @Test
     public void testMoveUpFloor() {
         int amt = 4;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setCurrentFloor(amt);
         int expResult = 5;
         int result = instance.moveUpFloor();
@@ -124,7 +124,7 @@ public class ElevatorTest {
     @Test
     public void testMoveDownFloor() {
         int amt = 10;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setCurrentFloor(amt);
         int expResult = 9;
         int result = instance.moveDownFloor();
@@ -137,7 +137,7 @@ public class ElevatorTest {
     @Test
     public void testPickUp() {
         int amt = 20;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         int expResult = amt;
         int result = instance.pickUp(amt);
         assertEquals(expResult, result);
@@ -149,7 +149,7 @@ public class ElevatorTest {
     @Test
     public void testDropOff() {
         int amt = 20;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         int expResult = 0;
         instance.pickUp(amt);
         int result = instance.dropOff(amt);
@@ -162,7 +162,7 @@ public class ElevatorTest {
     @Test
     public void testMoveTo() {
         int floor = 10, result;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.moveTo(floor);
         result = instance.getCurrentFloor();
         assertEquals(floor, result);
@@ -175,7 +175,7 @@ public class ElevatorTest {
     public void testMoveToOnInvalidHighFloor() {
         int floor = 50, result;
         int expectedResult = 1;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setCurrentFloor(expectedResult);
         instance.moveTo(floor);
         result = instance.getCurrentFloor();
@@ -189,7 +189,7 @@ public class ElevatorTest {
     public void testMoveToOnInvalidLowFloor() {
         int floor = 0, result;
         int expectedResult = 1;
-        Elevator instance = new Elevator("A");
+        Elevator instance = new Elevator("A",0);
         instance.setCurrentFloor(expectedResult);
         instance.moveTo(floor);
         result = instance.getCurrentFloor();

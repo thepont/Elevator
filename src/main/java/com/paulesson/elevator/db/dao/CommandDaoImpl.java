@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.paulesson.elevator.db.dao;
 
 import com.paulesson.elevator.db.entities.Command;
@@ -15,7 +9,7 @@ import org.hibernate.Transaction;
 
 /**
  *
- * @author pont
+ * @author Paul Esson
  */
 public class CommandDaoImpl implements CommandDao {
     private SessionFactory sessionFactory;
@@ -23,22 +17,6 @@ public class CommandDaoImpl implements CommandDao {
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-    
-//    @PostConstruct
-//    void init(){
-//        System.out.println("Creating table in given database...");
-//        
-//        Session session = this.sessionFactory.openSession();
-//            
-//
-//        String sql = "CREATE TABLE COMMAND " +
-//                    "(ID INTEGER not NULL, " +
-//                    " FLOOR_FROM VARCHAR(255), " +
-//                    " FLOOR_TO VARCHAR(255), " +
-//                    " NUM_PEOPLE INTEGER)";
-//        session.createQuery(sql);
-//        session.close();
-//    }
     
     @Override
     public int saveCommand(Command cmd){

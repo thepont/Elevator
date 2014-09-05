@@ -1,11 +1,13 @@
 package com.paulesson.elevator.elevatorcontrol;
 
+import com.paulesson.elevator.db.dao.ElevatorDao;
 import com.paulesson.elevator.elevatorcontrol.model.RequestCommand;
 import com.paulesson.elevator.elevatorcontrol.model.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
+import javax.annotation.PostConstruct;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -15,7 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 
 public class ElevatorCommandRouter {
     final static int START_QUEUE_SIZE = 0;
-    
+    private ElevatorDao elevatorDao;
     private final List<Elevator> elevators;
     private final Semaphore elevatorAvailible;
     private final Semaphore queueEmpty = new Semaphore(START_QUEUE_SIZE);
@@ -27,7 +29,30 @@ public class ElevatorCommandRouter {
         elevatorAvailible = new Semaphore(elevators.size());
         queueEmpty.drainPermits();
     }
-     
+    
+    @PostConstruct
+    void init(){
+        updateElevatorsFromDB();
+    }
+    /**
+     * Update all elevators in our list from the database.
+     */
+    protected void updateElevatorsFromDB(){
+        if(elevatorDao != null)
+        {
+            for(int i = 0; i<elevators.size(); i++)
+            {
+                String name = elevators.get(i).getName();
+                int id = elevators.get(i).getDbId();
+                    Elevator fromDB = new Elevator(elevatorDao.getOrCreate(id,name));
+                    elevators.set(i, fromDB);
+            }
+        }
+    }
+    
+    public void setElevatorDao(ElevatorDao elevatorDao){
+        this.elevatorDao = elevatorDao;
+    }
     
     /**
      * Queues a command and signals any threads waiting on queue.
@@ -42,6 +67,8 @@ public class ElevatorCommandRouter {
             queueEmpty.release();
         }
     }
+    
+
     
     /**
      * Waits on Queue requesting next command 

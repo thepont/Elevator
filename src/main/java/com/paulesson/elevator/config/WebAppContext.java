@@ -2,6 +2,8 @@ package com.paulesson.elevator.config;
 
 import com.paulesson.elevator.db.dao.CommandDao;
 import com.paulesson.elevator.db.dao.CommandDaoImpl;
+import com.paulesson.elevator.db.dao.ElevatorDao;
+import com.paulesson.elevator.db.dao.ElevatorDaoImpl;
 import com.paulesson.elevator.elevatorcontrol.CommandProcessingThread;
 import com.paulesson.elevator.elevatorcontrol.Elevator;
 import com.paulesson.elevator.elevatorcontrol.ElevatorCommandRouter;
@@ -34,9 +36,6 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     public static final String CSS_LOCATION = "/WEB-INF/css/";
     public static final String CSS_LOCATION_WEB_PATH = "/css/**";
     
-    public static final int NUMBER_ELEVATORS = 4;
-    public static final char FIRST_ELEVATOR_NAME = 'A';
-    
     public static final String JDBC_DRIVER_CLASS_NAME = "org.h2.Driver";
     public static final String JDBC_DRIVER_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     public static final String JDBC_DB_USERNAME = "sa";
@@ -54,6 +53,15 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     public static final String HIBERNATE_SHOW_SQL_PROPERTY = "hibernate.show_sql";
     public static final String HIBERNATE_SHOW_SQL_PROPERTY_VALUE = "true";
     
+    public static final String ELEVATOR_A_NAME = "A";
+    public static final String ELEVATOR_B_NAME = "B";
+    public static final String ELEVATOR_C_NAME = "C";
+    public static final String ELEVATOR_D_NAME = "D";
+    
+    public static final int ELEVATOR_A_ID = 0;
+    public static final int ELEVATOR_B_ID = 1;
+    public static final int ELEVATOR_C_ID = 2;
+    public static final int ELEVATOR_D_ID = 3;
     
     @Bean
     public UrlBasedViewResolver setupViewResolver() {
@@ -66,12 +74,17 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     
     @Bean
     public ElevatorCommandRouter setupCommandRouter(){
+        
+        ElevatorDao elevatorDao = setupElevatorDao();
         List<Elevator> availibleElevators = new ArrayList<Elevator>();
-        for(int i = 0; i < NUMBER_ELEVATORS; i++)
-        {
-            availibleElevators.add(new Elevator(String.valueOf(FIRST_ELEVATOR_NAME+i)));
-        }
+        
+        availibleElevators.add(new Elevator(ELEVATOR_A_NAME,ELEVATOR_A_ID));
+        availibleElevators.add(new Elevator(ELEVATOR_B_NAME,ELEVATOR_B_ID));
+        availibleElevators.add(new Elevator(ELEVATOR_C_NAME,ELEVATOR_C_ID));
+        availibleElevators.add(new Elevator(ELEVATOR_D_NAME,ELEVATOR_D_ID));
+        
         ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
+        ecr.setElevatorDao(elevatorDao);
         return ecr;
     }
     
@@ -96,7 +109,8 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     {
         AnnotationSessionFactoryBean sessionFactory = new AnnotationSessionFactoryBean();
         sessionFactory.setDataSource(setupDataSource());
-        sessionFactory.setAnnotatedClasses(com.paulesson.elevator.db.entities.Command.class);
+        sessionFactory.setAnnotatedClasses( com.paulesson.elevator.db.entities.Command.class,
+                                            com.paulesson.elevator.db.entities.Elevator.class );
         Properties hibernateProps = new Properties();
         
         hibernateProps.setProperty(HIBERNATE_DIALECT_PROPERTY, HIBERNATE_DIALECT_PROPERTY_VALUE);
@@ -113,6 +127,13 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         CommandDao commandDao = new CommandDaoImpl();
         ((CommandDaoImpl)commandDao).setSessionFactory(getSessionFactory().getObject());
         return commandDao;
+    }
+    
+    @Bean
+    public ElevatorDao setupElevatorDao(){
+        ElevatorDao elevatorDao = new ElevatorDaoImpl() {};
+        ((ElevatorDaoImpl)elevatorDao).setSessionFactory(getSessionFactory().getObject());
+        return elevatorDao;
     }
     
     @Override

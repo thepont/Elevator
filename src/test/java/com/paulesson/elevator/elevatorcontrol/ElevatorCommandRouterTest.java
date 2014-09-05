@@ -23,10 +23,10 @@ public class ElevatorCommandRouterTest {
     private List<Elevator> getListElevator(){
         List<Elevator> elevatorList = new ArrayList<Elevator>();
         
-        elevatorList.add(new Elevator("A"));
-        elevatorList.add(new Elevator("B"));
-        elevatorList.add(new Elevator("C"));
-        elevatorList.add(new Elevator("D"));
+        elevatorList.add(new Elevator("A",0));
+        elevatorList.add(new Elevator("B",1));
+        elevatorList.add(new Elevator("C",2));
+        elevatorList.add(new Elevator("D",3));
         
         return elevatorList;
     }
