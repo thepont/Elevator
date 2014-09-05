@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-        <!-- Hibernate session factory -->
+        <!-- 
     <bean id="hibernate3AnnotatedSessionFactory"
         class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -20,7 +20,7 @@
                 <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
-    </bean>
+    </bean>Hibernate session factory -->
     <!--bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
           p:location="/WEB-INF/jdbc.properties" />

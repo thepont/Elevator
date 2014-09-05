@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 /**
@@ -34,6 +35,12 @@ public class ElevatorCommandRouter {
     void init(){
         updateElevatorsFromDB();
     }
+    
+    @Autowired
+    public void setElevatorDao(ElevatorDao elevatorDao){
+        this.elevatorDao = elevatorDao;
+    }
+    
     /**
      * Update all elevators in our list from the database.
      */
@@ -50,11 +57,6 @@ public class ElevatorCommandRouter {
         }
     }
     
-    
-    
-    public void setElevatorDao(ElevatorDao elevatorDao){
-        this.elevatorDao = elevatorDao;
-    }
     
     /**
      * Queues a command and signals any threads waiting on queue.
@@ -121,25 +123,25 @@ public class ElevatorCommandRouter {
     protected int getQueueSemephoreSize(){
         return queueEmpty.availablePermits();
     }
-    /**
-     * Executes a command on an elevator.
-     * @param cmd command to execute
-     * @param e elevator to execute command on.
-     */
-    @Async
-    protected void execute(RequestCommand cmd, Elevator e){
-        int from = cmd.getLevelFrom();
-        int to = cmd.getLevelTo();
-        int amtPeople = cmd.getPeople();
+    
+    protected void execute(final RequestCommand cmd, final Elevator e) {
+        (new Thread() {
+            public void run() {
+                int from = cmd.getLevelFrom();
+                int to = cmd.getLevelTo();
+                int amtPeople = cmd.getPeople();
 
-        e.moveTo(from);
-        e.pickUp(amtPeople);
-        e.moveTo(to);
-        e.dropOff(amtPeople);
-        e.setDirection(Status.STOPPED);
-        elevatorDao.updateElevator(e.toDBEntity());
-        markElevatorAsAvailable();
-    } 
+                e.moveTo(from);
+                e.pickUp(amtPeople);
+                e.moveTo(to);
+                e.dropOff(amtPeople);
+                e.setDirection(Status.STOPPED);
+                elevatorDao.saveElevator(e.toDBEntity());
+                markElevatorAsAvailable();
+                // do stuff
+            }
+        }).start();
+    }
     
     /**
     * Return a copy of the current Elevators.

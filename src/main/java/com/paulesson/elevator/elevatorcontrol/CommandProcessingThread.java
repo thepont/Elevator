@@ -27,7 +27,7 @@ public class CommandProcessingThread extends Thread {
     boolean running = true;
     
     @Autowired
-    void setElevatorCommandRouter(ElevatorCommandRouter ecr){
+    public void setElevatorCommandRouter(ElevatorCommandRouter ecr){
         this.ecr = ecr;
     }
     

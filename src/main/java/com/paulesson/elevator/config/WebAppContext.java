@@ -25,7 +25,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 
 @Configuration
-@EnableAsync
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.paulesson.elevator.web.controllers"})
 public class WebAppContext extends WebMvcConfigurerAdapter {
@@ -88,7 +87,7 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
         availibleElevators.add(new Elevator(ELEVATOR_D_NAME,ELEVATOR_D_ID));
         
         ElevatorCommandRouter ecr = new ElevatorCommandRouter(availibleElevators);
-        ecr.setElevatorDao(elevatorDao);
+        //ecr.setElevatorDao(elevatorDao);
         return ecr;
     }
     
@@ -100,6 +99,7 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     @Bean
     public CommandProcessingThread setupCommandProcessingThread(){
         CommandProcessingThread cpt = new CommandProcessingThread();
+        //cpt.setElevatorCommandRouter(setupCommandRouter());
         return cpt;
     }
     /**
@@ -117,7 +117,7 @@ public class WebAppContext extends WebMvcConfigurerAdapter {
     }
     /**
      * Hibernate session factory
-     * @return the hibinate session factory.
+     * @return the hibernate session factory.
      */
     @Bean
     public AnnotationSessionFactoryBean getSessionFactory()
