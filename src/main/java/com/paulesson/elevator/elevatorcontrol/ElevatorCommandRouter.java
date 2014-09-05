@@ -50,6 +50,8 @@ public class ElevatorCommandRouter {
         }
     }
     
+    
+    
     public void setElevatorDao(ElevatorDao elevatorDao){
         this.elevatorDao = elevatorDao;
     }
@@ -130,6 +132,7 @@ public class ElevatorCommandRouter {
         e.moveTo(to);
         e.dropOff(amtPeople);
         e.setDirection(Status.STOPPED);
+        elevatorDao.saveElevator(e.toDBEntity());
         markElevatorAsAvailable();
     } 
     

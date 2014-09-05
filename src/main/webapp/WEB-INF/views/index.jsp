@@ -61,7 +61,7 @@
                         var s= document.getElementById("F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name);
                         var iconLBL = "F"+liftStatus[i].currentFloor+"E"+liftStatus[i].name + "Icon";
                         if(liftStatus[i].direction === "DOWN"){
-                            s.innerHTML = liftStatus[i].numPeople + " <span class='glyphicon glyphicon-chevron-down' id='"+iconLBL+"'></span>";
+                            s.innerHTML = liftStatus[i].numPeople + "<span class='glyphicon glyphicon-chevron-down' id='"+iconLBL+"'></span>";
                            
                         } else if(liftStatus[i].direction === "UP"){
                             s.innerHTML = liftStatus[i].numPeople + "<span class='glyphicon glyphicon-chevron-up' id='"+iconLBL+"'></span>";

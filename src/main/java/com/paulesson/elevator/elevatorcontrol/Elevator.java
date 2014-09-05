@@ -58,6 +58,16 @@ public class Elevator {
         }
     }
     
+    public com.paulesson.elevator.db.entities.Elevator toDBEntity(){
+        com.paulesson.elevator.db.entities.Elevator entity = new com.paulesson.elevator.db.entities.Elevator();
+        entity.setId(dbId);
+        entity.setName(name);
+        entity.setLoad(load.get());
+        entity.setStatus(direction.get());
+        entity.setCurrentFloor(currentFloor.get());
+        return entity;
+    }
+    
     /**
      * Elevator copy constructor
      * @param elevator original Elevator to copy
