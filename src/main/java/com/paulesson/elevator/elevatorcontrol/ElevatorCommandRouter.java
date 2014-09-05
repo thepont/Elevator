@@ -136,7 +136,7 @@ public class ElevatorCommandRouter {
                 e.moveTo(to);
                 e.dropOff(amtPeople);
                 e.setDirection(Status.STOPPED);
-                elevatorDao.saveElevator(e.toDBEntity());
+                elevatorDao.updateElevator(e.toDBEntity());
                 markElevatorAsAvailable();
                 // do stuff
             }
